@@ -8,7 +8,7 @@ namespace CamWatch
 {
     internal sealed class DeviceInventory
     {
-        private static readonly Guid KSCATEGORY_CAPTURE = new Guid("65E8773D-8F56-11D0-A3B9-00A0C9223196");
+        private static readonly Guid KSCATEGORY_VIDEO_CAMERA = new Guid("E5323777-F976-4F5B-9B55-B94699C46E44");
         private const int DIGCF_PRESENT = 0x2;
         private const int DIGCF_DEVICEINTERFACE = 0x10;
         private const int SPDRP_DEVICEDESC = 0x0;
@@ -80,7 +80,7 @@ namespace CamWatch
         private static List<DeviceEntry> EnumerateCameras()
         {
             List<DeviceEntry> result = new List<DeviceEntry>();
-            Guid captureGuid = KSCATEGORY_CAPTURE;
+            Guid captureGuid = KSCATEGORY_VIDEO_CAMERA;
             IntPtr set = SetupDiGetClassDevs(ref captureGuid, IntPtr.Zero, IntPtr.Zero, DIGCF_PRESENT | DIGCF_DEVICEINTERFACE);
             if (set == IntPtr.Zero || set == new IntPtr(-1)) return result;
             try

@@ -7,8 +7,8 @@ using System.Windows.Forms;
 [assembly: AssemblyTitle("设备使用记录")]
 [assembly: AssemblyDescription("摄像头占用记录")]
 [assembly: AssemblyProduct("设备使用记录")]
-[assembly: AssemblyVersion("0.1.0.0")]
-[assembly: AssemblyFileVersion("0.1.0.0")]
+[assembly: AssemblyVersion("0.1.1.0")]
+[assembly: AssemblyFileVersion("0.1.1.0")]
 
 namespace CamWatch
 {
