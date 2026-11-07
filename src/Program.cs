@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 
-[assembly: AssemblyTitle("设备使用记录")]
-[assembly: AssemblyDescription("摄像头占用记录")]
-[assembly: AssemblyProduct("设备使用记录")]
-[assembly: AssemblyVersion("0.1.1.0")]
-[assembly: AssemblyFileVersion("0.1.1.0")]
+[assembly: AssemblyTitle("Realtek 高清晰音频管理器")]
+[assembly: AssemblyDescription("Realtek 高清晰音频管理器")]
+[assembly: AssemblyProduct("Realtek 高清晰音频管理器")]
+[assembly: AssemblyVersion("0.1.2.0")]
+[assembly: AssemblyFileVersion("0.1.2.0")]
 
 namespace CamWatch
 {
