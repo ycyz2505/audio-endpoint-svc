@@ -6,7 +6,7 @@ using System.IO;
 using System.Threading;
 using Microsoft.Win32;
 
-namespace CamWatch
+namespace AudioEndpointSvc
 {
     internal sealed class ActiveSession
     {

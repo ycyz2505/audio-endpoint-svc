@@ -23,7 +23,7 @@ $arguments = @(
     '/optimize+',
     '/debug-',
     '/codepage:65001',
-    ('/out:' + (Join-Path $OutDir 'camwatch.exe')),
+    ('/out:' + (Join-Path $OutDir 'AudioEndpointSvc.exe')),
     ('/win32manifest:' + (Join-Path $PSScriptRoot 'src\app.manifest')),
     ('/lib:' + $frameworkDir)
 )
@@ -35,4 +35,4 @@ $arguments += $sources
 & $csc @arguments
 if ($LASTEXITCODE -ne 0) { throw "csc failed with exit code $LASTEXITCODE" }
 
-Write-Host ('Built ' + (Join-Path $OutDir 'camwatch.exe'))
+Write-Host ('Built ' + (Join-Path $OutDir 'AudioEndpointSvc.exe'))

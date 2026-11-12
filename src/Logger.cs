@@ -5,7 +5,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace CamWatch
+namespace AudioEndpointSvc
 {
     [DataContract]
     internal sealed class SessionRecord

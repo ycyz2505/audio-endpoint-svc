@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
 
-namespace CamWatch
+namespace AudioEndpointSvc
 {
     [DataContract]
     internal sealed class AppConfig

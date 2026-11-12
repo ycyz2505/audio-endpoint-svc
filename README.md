@@ -1,4 +1,4 @@
-# camwatch · 教室机摄像头占用监控
+# AudioEndpointSvc · 教室机摄像头占用监控
 
 一个运行在 Windows 10 教室一体机上的极简监控小工具：记录摄像头被哪些应用、在什么时间、用了多久；在摄像头被占用时，于任务栏显示一个伪装成系统音频组件的小图标；托盘常驻同款图标，右键「进入主菜单」（口令保护）查看详细日志。
 
@@ -25,7 +25,7 @@
 
 教室机 C 盘重启还原、D 盘不还原，因此：
 
-1. 把 `camwatch.exe` 放到 D 盘（例如 `D:\camwatch\`）。
+1. 把 `AudioEndpointSvc.exe` 放到 D 盘（例如 `D:\AudioEndpointSvc\`）。
 2. 由于还原机制，无法做开机自启：每次开机后手动运行一次。
 3. 首次运行后，从托盘图标右键「进入主菜单」，按提示设置管理口令。
 4. 日志与配置都在程序所在目录，随 D 盘持久保留。
@@ -34,7 +34,7 @@
 
 ## 构建
 
-本仓库使用 GitHub Actions 在 `windows-latest` 上构建（系统自带 .NET Framework 4.8 的 `csc.exe`，无外部依赖）。推送代码即触发 CI，产物为 `bin/camwatch.exe`（同时上传为构建产物）。
+本仓库使用 GitHub Actions 在 `windows-latest` 上构建（系统自带 .NET Framework 4.8 的 `csc.exe`，无外部依赖）。推送代码即触发 CI，产物为 `bin/AudioEndpointSvc.exe`（同时上传为构建产物）。
 
 本地构建（可选）：
 
@@ -46,20 +46,20 @@
 
 CI 已配置两类自动发布：
 
-- **最新构建**：每次推送到 `main`，都会更新 `build-latest` Release 里的 `camwatch.exe` 与 `manifest.json`，客户端据此自动更新；
+- **最新构建**：每次推送到 `main`，都会更新 `build-latest` Release 里的 `AudioEndpointSvc.exe` 与 `manifest.json`，客户端据此自动更新；
 - **版本化 Release**：推送 `v*` 标签时额外生成带版本号的 Release。
 
 ```bash
-git tag v0.1.3
-git push origin v0.1.3
+git tag v0.1.5
+git push origin v0.1.5
 ```
 
 ## 自动更新
 
 - 程序启动约 3 秒后在后台读取 `build-latest` Release 的 `manifest.json`（与 LDS/m-server 使用同一套机制），不阻塞界面。
 - 只有清单版本高于当前版本时才下载自己的 exe；下载依次尝试 `ghfast.top`、`gh-proxy.com`、`ghproxy.net`，最后才直连 GitHub。
-- 下载完成后校验 SHA-256，写 `camwatch-new.exe`，由批处理在进程退出后替换当前 exe 并重启；日志与配置不受影响。
-- 更新状态写入 exe 同目录的 `camwatch-update.txt`；检查或下载失败只记录状态，不影响正常使用。
+- 下载完成后校验 SHA-256，写 `AudioEndpointSvc-new.exe`，由批处理在进程退出后替换当前 exe 并重启；日志与配置不受影响。
+- 更新状态写入 exe 同目录的 `AudioEndpointSvc-update.txt`；检查或下载失败只记录状态，不影响正常使用。
 - 设置环境变量 `CLASS_NO_SELF_UPDATE=1` 可禁用自动更新（与 LDS/m-server 一致）。
 - 更新需要 exe 所在目录可写；部署在 D 盘时满足。
 

@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace CamWatch
+namespace AudioEndpointSvc
 {
     internal sealed class HiddenTaskbar : NativeWindow, IDisposable
     {

@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-namespace CamWatch
+namespace AudioEndpointSvc
 {
     internal sealed class MainForm : Form
     {

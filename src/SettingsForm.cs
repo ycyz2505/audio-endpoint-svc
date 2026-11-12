@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace CamWatch
+namespace AudioEndpointSvc
 {
     internal sealed class SettingsForm : Form
     {

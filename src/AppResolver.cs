@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 
-namespace CamWatch
+namespace AudioEndpointSvc
 {
     internal static class AppResolver
     {

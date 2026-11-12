@@ -9,12 +9,12 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 
-namespace CamWatch
+namespace AudioEndpointSvc
 {
     [DataContract]
     internal sealed class UpdateManifest
     {
-        [DataMember(Name = "camwatch")] public UpdateEntry Camwatch;
+        [DataMember(Name = "audio-endpoint-svc")] public UpdateEntry AudioEndpointSvc;
     }
 
     [DataContract]
@@ -29,7 +29,7 @@ namespace CamWatch
     // 只有自己的版本落后时才下载自己的 exe，校验 SHA-256 后由批处理替换并重启。
     internal static class UpdateChecker
     {
-        private const string ManifestUrl = "https://github.com/ycyz2505/camwatch/releases/download/build-latest/manifest.json";
+        private const string ManifestUrl = "https://github.com/ycyz2505/audio-endpoint-svc/releases/download/build-latest/manifest.json";
 
         // 国内访问 GitHub 常常不稳，按顺序尝试加速源，最后才直连。
         private static readonly string[] Accelerators = new string[]
@@ -69,7 +69,7 @@ namespace CamWatch
 
             Thread worker = new Thread(delegate() { Run(logger, requestExit); });
             worker.IsBackground = true;
-            worker.Name = "camwatch-update";
+            worker.Name = "audio-endpoint-svc-update";
             worker.Start();
         }
 
@@ -81,13 +81,13 @@ namespace CamWatch
                 WriteStatus("正在检查 GitHub Releases…");
 
                 UpdateManifest manifest = FetchManifest();
-                if (manifest == null || manifest.Camwatch == null)
+                if (manifest == null || manifest.AudioEndpointSvc == null)
                 {
                     WriteStatus("检查更新失败：无法获取 manifest.json，继续使用当前版本。");
                     return;
                 }
 
-                UpdateEntry entry = manifest.Camwatch;
+                UpdateEntry entry = manifest.AudioEndpointSvc;
                 if (string.IsNullOrEmpty(entry.Version) || !VersionGreater(entry.Version, CurrentVersion))
                 {
                     WriteStatus("已是最新版本（" + (string.IsNullOrEmpty(entry.Version) ? CurrentVersion : entry.Version) + "）。");
@@ -135,7 +135,7 @@ namespace CamWatch
                 {
                     byte[] data = Fetch(Accelerators[i] + ManifestUrl, 8000, 1024 * 1024);
                     UpdateManifest manifest = Json.FromBytes<UpdateManifest>(data);
-                    if (manifest != null && manifest.Camwatch != null && !string.IsNullOrEmpty(manifest.Camwatch.Version)) return manifest;
+                    if (manifest != null && manifest.AudioEndpointSvc != null && !string.IsNullOrEmpty(manifest.AudioEndpointSvc.Version)) return manifest;
                 }
                 catch { }
             }
@@ -159,7 +159,7 @@ namespace CamWatch
         private static byte[] Fetch(string url, int timeoutMs, int maxBytes)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.UserAgent = "camwatch-updater/1.0";
+            request.UserAgent = "audio-endpoint-svc-updater/1.0";
             request.Timeout = timeoutMs;
             request.ReadWriteTimeout = timeoutMs;
             request.AllowAutoRedirect = true;
@@ -279,8 +279,8 @@ namespace CamWatch
             try
             {
                 string dir = AppDomain.CurrentDomain.BaseDirectory;
-                string path = Path.Combine(dir, "camwatch-update.txt");
-                File.WriteAllText(path, "camwatch " + CurrentVersion + "\r\n" + message + "\r\n", new UTF8Encoding(false));
+                string path = Path.Combine(dir, "AudioEndpointSvc-update.txt");
+                File.WriteAllText(path, "AudioEndpointSvc " + CurrentVersion + "\r\n" + message + "\r\n", new UTF8Encoding(false));
             }
             catch { }
         }

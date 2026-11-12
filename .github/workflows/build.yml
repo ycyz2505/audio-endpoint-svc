@@ -29,10 +29,10 @@ jobs:
 
           $base = "https://github.com/${{ github.repository }}/releases/download/build-latest"
           $manifest = [ordered]@{
-            camwatch = [ordered]@{
+            'audio-endpoint-svc' = [ordered]@{
               version = $version
-              url     = "$base/camwatch.exe"
-              sha256  = (Get-FileHash -LiteralPath 'bin/camwatch.exe' -Algorithm SHA256).Hash.ToLower()
+              url     = "$base/AudioEndpointSvc.exe"
+              sha256  = (Get-FileHash -LiteralPath 'bin/AudioEndpointSvc.exe' -Algorithm SHA256).Hash.ToLower()
             }
           }
 
@@ -44,9 +44,9 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: camwatch
+          name: AudioEndpointSvc
           path: |
-            bin/camwatch.exe
+            bin/AudioEndpointSvc.exe
             manifest.json
           if-no-files-found: error
 
@@ -61,12 +61,12 @@ jobs:
           body: |
             由 GitHub Actions 自动构建，随 `main` 分支更新。
 
-            自动更新：camwatch 启动后读取本 Release 的 `manifest.json`，
+            自动更新：AudioEndpointSvc 启动后读取本 Release 的 `manifest.json`，
             只有自己的版本低于清单时才下载自己的 exe，校验 SHA-256 后替换并重启。
             下载会依次尝试 `ghfast.top`、`gh-proxy.com`、`ghproxy.net` 加速源，最后直连 GitHub。
-            更新状态写在 exe 同目录的 `camwatch-update.txt`。
+            更新状态写在 exe 同目录的 `AudioEndpointSvc-update.txt`。
           files: |
-            bin/camwatch.exe
+            bin/AudioEndpointSvc.exe
             manifest.json
           overwrite_files: true
           make_latest: true
@@ -76,6 +76,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            bin/camwatch.exe
+            bin/AudioEndpointSvc.exe
             manifest.json
           generate_release_notes: true

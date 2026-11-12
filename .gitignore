@@ -3,7 +3,7 @@ logs/
 state.json
 config.json
 manifest.json
-camwatch-update.txt
+AudioEndpointSvc-update.txt
 *-new.exe
 update-*.bat
 *.user

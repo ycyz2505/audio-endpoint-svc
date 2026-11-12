@@ -7,14 +7,14 @@ using System.Windows.Forms;
 [assembly: AssemblyTitle("Realtek 高清晰音频管理器")]
 [assembly: AssemblyDescription("Realtek 高清晰音频管理器")]
 [assembly: AssemblyProduct("Realtek 高清晰音频管理器")]
-[assembly: AssemblyVersion("0.1.4.0")]
-[assembly: AssemblyFileVersion("0.1.4.0")]
+[assembly: AssemblyVersion("0.1.5.0")]
+[assembly: AssemblyFileVersion("0.1.5.0")]
 
-namespace CamWatch
+namespace AudioEndpointSvc
 {
     internal static class Program
     {
-        private const string MutexName = "Local\\camwatch_single_instance_v1";
+        private const string MutexName = "Local\\audio_endpoint_svc_single_instance_v1";
 
         [STAThread]
         private static void Main()
