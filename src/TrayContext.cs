@@ -14,6 +14,7 @@ namespace CamWatch
         private readonly Icon _icon;
         private readonly HiddenTaskbar _taskbar;
         private readonly NotifyIcon _notify;
+        private readonly Control _dispatch;
         private readonly Timer _tick;
         private MainForm _mainForm;
 
@@ -23,6 +24,9 @@ namespace CamWatch
             _logger = logger;
             _monitor = monitor;
             _devices = devices;
+
+            _dispatch = new Control();
+            _dispatch.CreateControl();
 
             _icon = IconLoader.LoadDisguiseIcon();
             _taskbar = new HiddenTaskbar(_config.Value.DisguiseName, _icon);
@@ -112,6 +116,20 @@ namespace CamWatch
             {
                 _logger.AppendError("打开主菜单失败: " + ex.Message);
             }
+        }
+
+        public void RequestExitForUpdate()
+        {
+            try
+            {
+                if (_dispatch != null && _dispatch.IsHandleCreated)
+                {
+                    _dispatch.BeginInvoke((MethodInvoker)delegate { Application.Exit(); });
+                    return;
+                }
+            }
+            catch { }
+            Environment.Exit(0);
         }
 
         protected override void ExitThreadCore()

@@ -44,14 +44,24 @@
 
 ## 发布（自动）
 
-CI 已配置为**自动发布**：推送一个 `v*` 标签到 `main` 分支即由 GitHub Actions 自动完成构建并创建 Release，无需手动执行 `gh release create`。
+CI 已配置两类自动发布：
+
+- **最新构建**：每次推送到 `main`，都会更新 `build-latest` Release 里的 `camwatch.exe` 与 `manifest.json`，客户端据此自动更新；
+- **版本化 Release**：推送 `v*` 标签时额外生成带版本号的 Release。
 
 ```bash
-git tag v0.1.0
-git push origin v0.1.0
+git tag v0.1.3
+git push origin v0.1.3
 ```
 
-生成的 Release 会自动附带 `camwatch.exe`。
+## 自动更新
+
+- 程序启动约 3 秒后在后台读取 `build-latest` Release 的 `manifest.json`（与 LDS/m-server 使用同一套机制），不阻塞界面。
+- 只有清单版本高于当前版本时才下载自己的 exe；下载依次尝试 `ghfast.top`、`gh-proxy.com`、`ghproxy.net`，最后才直连 GitHub。
+- 下载完成后校验 SHA-256，写 `camwatch-new.exe`，由批处理在进程退出后替换当前 exe 并重启；日志与配置不受影响。
+- 更新状态写入 exe 同目录的 `camwatch-update.txt`；检查或下载失败只记录状态，不影响正常使用。
+- 设置环境变量 `CLASS_NO_SELF_UPDATE=1` 可禁用自动更新（与 LDS/m-server 一致）。
+- 更新需要 exe 所在目录可写；部署在 D 盘时满足。
 
 ## 配置项（config.json）
 

@@ -20,16 +20,62 @@ jobs:
         shell: pwsh
         run: ./build.ps1
 
+      # 版本号取自程序集版本；清单与 exe 在同一次构建里生成，保证 SHA-256 一致。
+      - name: Generate update manifest
+        shell: pwsh
+        run: |
+          $version = [regex]::Match((Get-Content -LiteralPath 'src/Program.cs' -Raw), 'AssemblyVersion\("([^"]+)"\)').Groups[1].Value
+          if (-not $version) { throw 'version not found' }
+
+          $base = "https://github.com/${{ github.repository }}/releases/download/build-latest"
+          $manifest = [ordered]@{
+            camwatch = [ordered]@{
+              version = $version
+              url     = "$base/camwatch.exe"
+              sha256  = (Get-FileHash -LiteralPath 'bin/camwatch.exe' -Algorithm SHA256).Hash.ToLower()
+            }
+          }
+
+          $json = $manifest | ConvertTo-Json -Depth 4
+          $utf8 = New-Object System.Text.UTF8Encoding($false)
+          [System.IO.File]::WriteAllText((Join-Path $PWD 'manifest.json'), $json, $utf8)
+          Get-Content -LiteralPath 'manifest.json'
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: camwatch
-          path: bin/camwatch.exe
+          path: |
+            bin/camwatch.exe
+            manifest.json
           if-no-files-found: error
+
+      # main 分支每次成功构建都更新同一个 Release，
+      # 使用者永远从「最新构建」拿 exe，启动时自动比对版本。
+      - name: Publish latest build
+        if: github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-latest
+          name: 最新构建
+          body: |
+            由 GitHub Actions 自动构建，随 `main` 分支更新。
+
+            自动更新：camwatch 启动后读取本 Release 的 `manifest.json`，
+            只有自己的版本低于清单时才下载自己的 exe，校验 SHA-256 后替换并重启。
+            下载会依次尝试 `ghfast.top`、`gh-proxy.com`、`ghproxy.net` 加速源，最后直连 GitHub。
+            更新状态写在 exe 同目录的 `camwatch-update.txt`。
+          files: |
+            bin/camwatch.exe
+            manifest.json
+          overwrite_files: true
+          make_latest: true
 
       - name: Release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: bin/camwatch.exe
+          files: |
+            bin/camwatch.exe
+            manifest.json
           generate_release_notes: true

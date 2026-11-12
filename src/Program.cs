@@ -7,8 +7,8 @@ using System.Windows.Forms;
 [assembly: AssemblyTitle("Realtek 高清晰音频管理器")]
 [assembly: AssemblyDescription("Realtek 高清晰音频管理器")]
 [assembly: AssemblyProduct("Realtek 高清晰音频管理器")]
-[assembly: AssemblyVersion("0.1.2.0")]
-[assembly: AssemblyFileVersion("0.1.2.0")]
+[assembly: AssemblyVersion("0.1.3.0")]
+[assembly: AssemblyFileVersion("0.1.3.0")]
 
 namespace CamWatch
 {
@@ -51,6 +51,7 @@ namespace CamWatch
 
                     monitor.Start();
                     devices.Start();
+                    UpdateChecker.Start(logger, context.RequestExitForUpdate);
 
                     Application.Run(context);
                 }

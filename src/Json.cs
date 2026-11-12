@@ -26,6 +26,15 @@ namespace CamWatch
             }
         }
 
+        public static T FromBytes<T>(byte[] data)
+        {
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
+            using (MemoryStream stream = new MemoryStream(data))
+            {
+                return (T)serializer.ReadObject(stream);
+            }
+        }
+
         public static T LoadFile<T>(string path) where T : class
         {
             if (!File.Exists(path)) return null;

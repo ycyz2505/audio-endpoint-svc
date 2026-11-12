@@ -2,4 +2,8 @@ bin/
 logs/
 state.json
 config.json
+manifest.json
+camwatch-update.txt
+*-new.exe
+update-*.bat
 *.user
