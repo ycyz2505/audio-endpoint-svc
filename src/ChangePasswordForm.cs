@@ -22,69 +22,82 @@ namespace AudioEndpointSvc
             MaximizeBox = false;
             MinimizeBox = false;
             ShowInTaskbar = false;
+            AutoScaleMode = AutoScaleMode.Dpi;
+            AutoSize = true;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
             Font = new Font("Microsoft YaHei UI", 9f);
-            ClientSize = new Size(340, 250);
             BackColor = Color.White;
 
-            Label currentLabel = new Label();
-            currentLabel.Text = "当前口令";
-            currentLabel.AutoSize = true;
-            currentLabel.Location = new Point(18, 16);
-            Controls.Add(currentLabel);
+            TableLayoutPanel root = new TableLayoutPanel();
+            root.AutoSize = true;
+            root.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            root.Padding = new Padding(18, 16, 18, 14);
+            root.ColumnCount = 1;
+            root.RowCount = 8;
+            root.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 320));
+            Controls.Add(root);
 
-            _current = new TextBox();
-            _current.UseSystemPasswordChar = true;
-            _current.Location = new Point(18, 38);
-            _current.Width = 300;
-            Controls.Add(_current);
+            root.Controls.Add(MakeLabel("当前口令"));
+            _current = MakeTextBox();
+            root.Controls.Add(_current);
+            root.Controls.Add(MakeLabel("新口令（至少 4 位）"));
+            _next = MakeTextBox();
+            root.Controls.Add(_next);
+            root.Controls.Add(MakeLabel("再次输入新口令"));
+            _confirm = MakeTextBox();
+            root.Controls.Add(_confirm);
 
-            Label nextLabel = new Label();
-            nextLabel.Text = "新口令（至少 4 位）";
-            nextLabel.AutoSize = true;
-            nextLabel.Location = new Point(18, 70);
-            Controls.Add(nextLabel);
-
-            _next = new TextBox();
-            _next.UseSystemPasswordChar = true;
-            _next.Location = new Point(18, 92);
-            _next.Width = 300;
-            Controls.Add(_next);
-
-            Label confirmLabel = new Label();
-            confirmLabel.Text = "再次输入新口令";
-            confirmLabel.AutoSize = true;
-            confirmLabel.Location = new Point(18, 124);
-            Controls.Add(confirmLabel);
-
-            _confirm = new TextBox();
-            _confirm.UseSystemPasswordChar = true;
-            _confirm.Location = new Point(18, 146);
-            _confirm.Width = 300;
-            Controls.Add(_confirm);
-
-            _message = new Label();
+            _message = MakeLabel(" ");
             _message.ForeColor = Color.Firebrick;
-            _message.AutoSize = true;
-            _message.Location = new Point(18, 178);
-            Controls.Add(_message);
+            _message.MinimumSize = new Size(0, 22);
+            root.Controls.Add(_message);
 
-            Button ok = new Button();
-            ok.Text = "确定";
-            ok.Location = new Point(150, 208);
-            ok.Width = 80;
-            ok.Click += delegate { Confirm(); };
-            Controls.Add(ok);
-            AcceptButton = ok;
-
-            Button cancel = new Button();
-            cancel.Text = "取消";
-            cancel.Location = new Point(238, 208);
-            cancel.Width = 80;
+            FlowLayoutPanel actions = new FlowLayoutPanel();
+            actions.AutoSize = true;
+            actions.Dock = DockStyle.Fill;
+            actions.FlowDirection = FlowDirection.RightToLeft;
+            actions.WrapContents = false;
+            actions.Margin = new Padding(0, 5, 0, 0);
+            Button cancel = MakeButton("取消");
             cancel.DialogResult = DialogResult.Cancel;
-            Controls.Add(cancel);
+            Button ok = MakeButton("确定");
+            ok.Click += delegate { Confirm(); };
+            actions.Controls.Add(cancel);
+            actions.Controls.Add(ok);
+            root.Controls.Add(actions);
+            AcceptButton = ok;
             CancelButton = cancel;
 
             Shown += delegate { _current.Focus(); };
+        }
+
+        private static Label MakeLabel(string text)
+        {
+            Label label = new Label();
+            label.Text = text;
+            label.AutoSize = true;
+            label.Dock = DockStyle.Fill;
+            label.Margin = new Padding(0, 5, 0, 4);
+            return label;
+        }
+
+        private static TextBox MakeTextBox()
+        {
+            TextBox text = new TextBox();
+            text.UseSystemPasswordChar = true;
+            text.Dock = DockStyle.Fill;
+            text.Margin = new Padding(0, 0, 0, 6);
+            return text;
+        }
+
+        private static Button MakeButton(string text)
+        {
+            Button button = new Button();
+            button.Text = text;
+            button.AutoSize = true;
+            button.MinimumSize = new Size(82, 30);
+            button.Margin = new Padding(4, 3, 0, 3);
+            return button;
         }
 
         private void Confirm()

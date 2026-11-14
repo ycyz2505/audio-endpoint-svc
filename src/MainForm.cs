@@ -62,8 +62,9 @@ namespace AudioEndpointSvc
 
             Text = "设备使用记录";
             StartPosition = FormStartPosition.CenterScreen;
+            AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(1000, 640);
-            MinimumSize = new Size(880, 520);
+            MinimumSize = new Size(760, 500);
             Font = new Font("Microsoft YaHei UI", 9f);
             BackColor = Color.White;
 
@@ -79,100 +80,77 @@ namespace AudioEndpointSvc
         private void BuildUi()
         {
             _building = true;
-            Panel top = new Panel();
-            top.Dock = DockStyle.Top;
-            top.Height = 106;
-            Controls.Add(top);
 
-            Label rangeLabel = new Label();
-            rangeLabel.Text = "范围";
-            rangeLabel.AutoSize = true;
-            rangeLabel.Location = new Point(16, 14);
-            top.Controls.Add(rangeLabel);
+            TableLayoutPanel root = new TableLayoutPanel();
+            root.Dock = DockStyle.Fill;
+            root.Padding = new Padding(12);
+            root.ColumnCount = 1;
+            root.RowCount = 4;
+            root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));
+            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            root.RowStyles.Add(new RowStyle(SizeType.Percent, 100f));
+            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            Controls.Add(root);
 
-            _rangeCombo = new ComboBox();
-            _rangeCombo.DropDownStyle = ComboBoxStyle.DropDownList;
-            _rangeCombo.Location = new Point(56, 10);
-            _rangeCombo.Width = 100;
+            FlowLayoutPanel filters = new FlowLayoutPanel();
+            filters.Dock = DockStyle.Fill;
+            filters.AutoSize = true;
+            filters.WrapContents = true;
+            filters.FlowDirection = FlowDirection.LeftToRight;
+            filters.Margin = new Padding(0, 0, 0, 8);
+            root.Controls.Add(filters, 0, 0);
+
+            filters.Controls.Add(MakeFilterLabel("范围"));
+            _rangeCombo = MakeComboBox(105);
             _rangeCombo.Items.Add("今天");
             _rangeCombo.Items.Add("近 7 天");
             _rangeCombo.Items.Add("近 30 天");
             _rangeCombo.Items.Add("全部");
             _rangeCombo.SelectedIndex = 0;
             _rangeCombo.SelectedIndexChanged += delegate { if (!_building) ApplyFilter(); };
-            top.Controls.Add(_rangeCombo);
+            filters.Controls.Add(_rangeCombo);
 
-            Label appLabel = new Label();
-            appLabel.Text = "程序";
-            appLabel.AutoSize = true;
-            appLabel.Location = new Point(172, 14);
-            top.Controls.Add(appLabel);
-
-            _appCombo = new ComboBox();
-            _appCombo.DropDownStyle = ComboBoxStyle.DropDownList;
-            _appCombo.Location = new Point(212, 10);
-            _appCombo.Width = 220;
+            filters.Controls.Add(MakeFilterLabel("程序"));
+            _appCombo = MakeComboBox(230);
             _appCombo.SelectedIndexChanged += delegate { if (!_building) ApplyFilter(); };
-            top.Controls.Add(_appCombo);
+            filters.Controls.Add(_appCombo);
 
-            Label deviceLabel = new Label();
-            deviceLabel.Text = "设备";
-            deviceLabel.AutoSize = true;
-            deviceLabel.Location = new Point(448, 14);
-            top.Controls.Add(deviceLabel);
-
-            _deviceCombo = new ComboBox();
-            _deviceCombo.DropDownStyle = ComboBoxStyle.DropDownList;
-            _deviceCombo.Location = new Point(488, 10);
-            _deviceCombo.Width = 180;
+            filters.Controls.Add(MakeFilterLabel("设备"));
+            _deviceCombo = MakeComboBox(190);
             _deviceCombo.SelectedIndexChanged += delegate { if (!_building) ApplyFilter(); };
-            top.Controls.Add(_deviceCombo);
+            filters.Controls.Add(_deviceCombo);
 
-            Button refresh = new Button();
-            refresh.Text = "刷新";
-            refresh.Location = new Point(688, 8);
-            refresh.Width = 70;
+            Button refresh = MakeButton("刷新", 72);
             refresh.Click += delegate { LoadData(); };
-            top.Controls.Add(refresh);
-
-            Button settings = new Button();
-            settings.Text = "设置";
-            settings.Location = new Point(766, 8);
-            settings.Width = 70;
+            filters.Controls.Add(refresh);
+            Button settings = MakeButton("设置", 72);
             settings.Click += delegate { OpenSettings(); };
-            top.Controls.Add(settings);
+            filters.Controls.Add(settings);
 
-            _liveLabel = new Label();
-            _liveLabel.AutoSize = true;
-            _liveLabel.Location = new Point(16, 48);
-            _liveLabel.Font = new Font("Microsoft YaHei UI", 9f, FontStyle.Bold);
-            top.Controls.Add(_liveLabel);
-
-            _statsLabel = new Label();
-            _statsLabel.AutoSize = true;
-            _statsLabel.Location = new Point(16, 74);
-            top.Controls.Add(_statsLabel);
+            TableLayoutPanel status = new TableLayoutPanel();
+            status.Dock = DockStyle.Fill;
+            status.AutoSize = true;
+            status.ColumnCount = 1;
+            status.RowCount = 2;
+            status.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));
+            status.Margin = new Padding(0, 0, 0, 8);
+            _liveLabel = MakeStatusLabel(true);
+            _statsLabel = MakeStatusLabel(false);
+            status.Controls.Add(_liveLabel, 0, 0);
+            status.Controls.Add(_statsLabel, 0, 1);
+            root.Controls.Add(status, 0, 1);
 
             TabControl tabs = new TabControl();
             tabs.Dock = DockStyle.Fill;
-            Controls.Add(tabs);
+            tabs.Margin = new Padding(0);
+            root.Controls.Add(tabs, 0, 2);
 
             TabPage sessionsPage = new TabPage("会话明细");
             sessionsPage.BackColor = Color.White;
             tabs.TabPages.Add(sessionsPage);
 
-            _sessionsGrid = new DataGridView();
-            _sessionsGrid.Dock = DockStyle.Fill;
-            _sessionsGrid.ReadOnly = true;
-            _sessionsGrid.AllowUserToAddRows = false;
-            _sessionsGrid.AllowUserToDeleteRows = false;
-            _sessionsGrid.AllowUserToResizeRows = false;
-            _sessionsGrid.RowHeadersVisible = false;
-            _sessionsGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            _sessionsGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            _sessionsGrid.MultiSelect = false;
-            _sessionsGrid.BorderStyle = BorderStyle.None;
-            _sessionsGrid.BackgroundColor = Color.White;
+            _sessionsGrid = MakeGrid();
             AddTextColumn(_sessionsGrid, "date", "日期", 80);
             AddTextColumn(_sessionsGrid, "start", "开始", 70);
             AddTextColumn(_sessionsGrid, "end", "结束", 70);
@@ -187,18 +165,7 @@ namespace AudioEndpointSvc
             summaryPage.BackColor = Color.White;
             tabs.TabPages.Add(summaryPage);
 
-            _summaryGrid = new DataGridView();
-            _summaryGrid.Dock = DockStyle.Fill;
-            _summaryGrid.ReadOnly = true;
-            _summaryGrid.AllowUserToAddRows = false;
-            _summaryGrid.AllowUserToDeleteRows = false;
-            _summaryGrid.AllowUserToResizeRows = false;
-            _summaryGrid.RowHeadersVisible = false;
-            _summaryGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            _summaryGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            _summaryGrid.MultiSelect = false;
-            _summaryGrid.BorderStyle = BorderStyle.None;
-            _summaryGrid.BackgroundColor = Color.White;
+            _summaryGrid = MakeGrid();
             AddTextColumn(_summaryGrid, "app", "程序", 240);
             AddTextColumn(_summaryGrid, "count", "次数", 70);
             AddTextColumn(_summaryGrid, "total", "总时长", 110);
@@ -213,47 +180,83 @@ namespace AudioEndpointSvc
             };
             summaryPage.Controls.Add(_summaryGrid);
 
-            Panel bottom = new Panel();
-            bottom.Dock = DockStyle.Bottom;
-            bottom.Height = 46;
-            Controls.Add(bottom);
-
-            Button export = new Button();
-            export.Text = "导出 CSV";
-            export.Location = new Point(590, 10);
-            export.Width = 92;
-            export.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            export.Click += delegate { ExportCsv(); };
-            bottom.Controls.Add(export);
-
-            Button clear = new Button();
-            clear.Text = "清理日志";
-            clear.Location = new Point(690, 10);
-            clear.Width = 92;
-            clear.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            clear.Click += delegate { ClearLogs(); };
-            bottom.Controls.Add(clear);
-
-            Button hide = new Button();
-            hide.Text = "关闭";
-            hide.Location = new Point(790, 10);
-            hide.Width = 70;
-            hide.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            hide.Click += delegate { Hide(); };
-            bottom.Controls.Add(hide);
-
-            Button exit = new Button();
-            exit.Text = "退出程序";
-            exit.Location = new Point(868, 10);
-            exit.Width = 92;
-            exit.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            FlowLayoutPanel actions = new FlowLayoutPanel();
+            actions.Dock = DockStyle.Fill;
+            actions.AutoSize = true;
+            actions.FlowDirection = FlowDirection.RightToLeft;
+            actions.WrapContents = false;
+            actions.Margin = new Padding(0, 8, 0, 0);
+            Button exit = MakeButton("退出程序", 92);
             exit.Click += delegate { ExitProgram(); };
-            bottom.Controls.Add(exit);
+            Button hide = MakeButton("关闭", 72);
+            hide.Click += delegate { Hide(); };
+            Button clear = MakeButton("清理日志", 92);
+            clear.Click += delegate { ClearLogs(); };
+            Button export = MakeButton("导出 CSV", 92);
+            export.Click += delegate { ExportCsv(); };
+            actions.Controls.Add(exit);
+            actions.Controls.Add(hide);
+            actions.Controls.Add(clear);
+            actions.Controls.Add(export);
+            root.Controls.Add(actions, 0, 3);
 
-            // Bottom panel must sit above the tab control fill area.
-            bottom.BringToFront();
-            top.BringToFront();
             _building = false;
+        }
+
+        private static Label MakeFilterLabel(string text)
+        {
+            Label label = new Label();
+            label.Text = text;
+            label.AutoSize = true;
+            label.Margin = new Padding(4, 8, 4, 3);
+            return label;
+        }
+
+        private static ComboBox MakeComboBox(int width)
+        {
+            ComboBox combo = new ComboBox();
+            combo.DropDownStyle = ComboBoxStyle.DropDownList;
+            combo.Width = width;
+            combo.Margin = new Padding(0, 3, 12, 3);
+            return combo;
+        }
+
+        private static Button MakeButton(string text, int width)
+        {
+            Button button = new Button();
+            button.Text = text;
+            button.AutoSize = true;
+            button.MinimumSize = new Size(width, 30);
+            button.Margin = new Padding(4, 3, 4, 3);
+            return button;
+        }
+
+        private static Label MakeStatusLabel(bool bold)
+        {
+            Label label = new Label();
+            label.AutoSize = true;
+            label.Dock = DockStyle.Fill;
+            label.MaximumSize = new Size(0, 0);
+            label.Margin = new Padding(4, 3, 4, 3);
+            if (bold) label.Font = new Font("Microsoft YaHei UI", 9f, FontStyle.Bold);
+            return label;
+        }
+
+        private static DataGridView MakeGrid()
+        {
+            DataGridView grid = new DataGridView();
+            grid.Dock = DockStyle.Fill;
+            grid.ReadOnly = true;
+            grid.AllowUserToAddRows = false;
+            grid.AllowUserToDeleteRows = false;
+            grid.AllowUserToResizeRows = false;
+            grid.RowHeadersVisible = false;
+            grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            grid.MultiSelect = false;
+            grid.BorderStyle = BorderStyle.None;
+            grid.BackgroundColor = Color.White;
+            return grid;
         }
 
         private static void AddTextColumn(DataGridView grid, string name, string header, int weight)
@@ -504,8 +507,8 @@ namespace AudioEndpointSvc
                 else if (devices.Count == 1) deviceText = devices[0].Name;
                 else deviceText = devices.Count + " 个摄像头（设备归因未知）";
 
-                _statsLabel.Text = _statsLabel.Text.Split(new string[] { "    任务栏图标" }, StringSplitOptions.None)[0]
-                    + "    任务栏图标：" + mode + "    设备：" + deviceText;
+                _statsLabel.Text = _statsLabel.Text.Split(new string[] { "    占用指示" }, StringSplitOptions.None)[0]
+                    + "    占用指示：" + mode + "    设备：" + deviceText;
             }
             catch { }
         }

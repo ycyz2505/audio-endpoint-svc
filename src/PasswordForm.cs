@@ -23,66 +23,93 @@ namespace AudioEndpointSvc
             MaximizeBox = false;
             MinimizeBox = false;
             ShowInTaskbar = false;
+            AutoScaleMode = AutoScaleMode.Dpi;
+            AutoSize = true;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
             Font = new Font("Microsoft YaHei UI", 9f);
-            ClientSize = new Size(340, _setup ? 200 : 160);
             BackColor = Color.White;
 
-            Label title = new Label();
-            title.Text = _setup ? "首次使用，请设置管理口令" : "请输入管理口令";
-            title.AutoSize = true;
-            title.Location = new Point(18, 16);
-            Controls.Add(title);
+            TableLayoutPanel root = new TableLayoutPanel();
+            root.AutoSize = true;
+            root.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            root.Padding = new Padding(18, 16, 18, 14);
+            root.ColumnCount = 1;
+            root.RowCount = _setup ? 7 : 5;
+            root.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 320));
+            Controls.Add(root);
 
-            Label firstLabel = new Label();
-            firstLabel.Text = _setup ? "新口令（至少 4 位）" : "口令";
-            firstLabel.AutoSize = true;
-            firstLabel.Location = new Point(18, 46);
-            Controls.Add(firstLabel);
+            Label title = MakeLabel(_setup ? "首次使用，请设置管理口令" : "请输入管理口令", true);
+            root.Controls.Add(title);
 
-            _first = new TextBox();
-            _first.UseSystemPasswordChar = true;
-            _first.Location = new Point(18, 68);
-            _first.Width = 300;
-            Controls.Add(_first);
+            root.Controls.Add(MakeLabel(_setup ? "新口令（至少 4 位）" : "口令", false));
+            _first = MakeTextBox();
+            root.Controls.Add(_first);
 
             if (_setup)
             {
-                Label secondLabel = new Label();
-                secondLabel.Text = "再次输入";
-                secondLabel.AutoSize = true;
-                secondLabel.Location = new Point(18, 98);
-                Controls.Add(secondLabel);
-
-                _second = new TextBox();
-                _second.UseSystemPasswordChar = true;
-                _second.Location = new Point(18, 120);
-                _second.Width = 300;
-                Controls.Add(_second);
+                root.Controls.Add(MakeLabel("再次输入", false));
+                _second = MakeTextBox();
+                root.Controls.Add(_second);
             }
 
-            _message = new Label();
+            _message = MakeLabel(" ", false);
             _message.ForeColor = Color.Firebrick;
-            _message.AutoSize = true;
-            _message.Location = new Point(18, _setup ? 148 : 98);
-            Controls.Add(_message);
+            _message.MinimumSize = new Size(0, 22);
+            root.Controls.Add(_message);
 
-            Button ok = new Button();
-            ok.Text = "确定";
-            ok.Location = new Point(150, _setup ? 168 : 120);
-            ok.Width = 80;
-            ok.Click += delegate { Confirm(); };
-            Controls.Add(ok);
-            AcceptButton = ok;
-
-            Button cancel = new Button();
-            cancel.Text = "取消";
-            cancel.Location = new Point(238, _setup ? 168 : 120);
-            cancel.Width = 80;
+            FlowLayoutPanel actions = MakeActions();
+            Button cancel = MakeButton("取消");
             cancel.DialogResult = DialogResult.Cancel;
-            Controls.Add(cancel);
+            Button ok = MakeButton("确定");
+            ok.Click += delegate { Confirm(); };
+            actions.Controls.Add(cancel);
+            actions.Controls.Add(ok);
+            root.Controls.Add(actions);
+            AcceptButton = ok;
             CancelButton = cancel;
 
             Shown += delegate { _first.Focus(); };
+        }
+
+        private static Label MakeLabel(string text, bool title)
+        {
+            Label label = new Label();
+            label.Text = text;
+            label.AutoSize = true;
+            label.Dock = DockStyle.Fill;
+            label.Margin = title ? new Padding(0, 0, 0, 12) : new Padding(0, 5, 0, 4);
+            if (title) label.Font = new Font("Microsoft YaHei UI", 10f, FontStyle.Bold);
+            return label;
+        }
+
+        private static TextBox MakeTextBox()
+        {
+            TextBox text = new TextBox();
+            text.UseSystemPasswordChar = true;
+            text.Dock = DockStyle.Fill;
+            text.Margin = new Padding(0, 0, 0, 6);
+            return text;
+        }
+
+        private static FlowLayoutPanel MakeActions()
+        {
+            FlowLayoutPanel panel = new FlowLayoutPanel();
+            panel.AutoSize = true;
+            panel.Dock = DockStyle.Fill;
+            panel.FlowDirection = FlowDirection.RightToLeft;
+            panel.WrapContents = false;
+            panel.Margin = new Padding(0, 5, 0, 0);
+            return panel;
+        }
+
+        private static Button MakeButton(string text)
+        {
+            Button button = new Button();
+            button.Text = text;
+            button.AutoSize = true;
+            button.MinimumSize = new Size(82, 30);
+            button.Margin = new Padding(4, 3, 0, 3);
+            return button;
         }
 
         private void Confirm()

@@ -12,8 +12,8 @@ namespace AudioEndpointSvc
         private readonly CameraMonitor _monitor;
         private readonly DeviceInventory _devices;
         private readonly Icon _icon;
-        private readonly HiddenTaskbar _taskbar;
-        private readonly NotifyIcon _notify;
+        private readonly NotifyIcon _occupancyIcon;
+        private readonly NotifyIcon _entryIcon;
         private readonly Control _dispatch;
         private readonly Timer _tick;
         private MainForm _mainForm;
@@ -29,18 +29,24 @@ namespace AudioEndpointSvc
             _dispatch.CreateControl();
 
             _icon = IconLoader.LoadDisguiseIcon();
-            _taskbar = new HiddenTaskbar(_config.Value.DisguiseName, _icon);
 
-            _notify = new NotifyIcon();
-            _notify.Icon = _icon;
-            _notify.Text = _config.Value.DisguiseName;
-            _notify.Visible = true;
-
+            // 常驻的功能入口图标。
+            _entryIcon = new NotifyIcon();
+            _entryIcon.Icon = _icon;
+            _entryIcon.Text = _config.Value.DisguiseName;
             ContextMenuStrip menu = new ContextMenuStrip();
             ToolStripMenuItem item = new ToolStripMenuItem("进入主菜单");
             item.Click += delegate { OpenMainMenu(); };
             menu.Items.Add(item);
-            _notify.ContextMenuStrip = menu;
+            _entryIcon.ContextMenuStrip = menu;
+            _entryIcon.Visible = true;
+
+            // 独立的占用指示图标：位于任务栏右侧通知区域，仅命中显示规则时出现。
+            // 不挂菜单、不响应点击，避免它和常驻入口混为同一个功能入口。
+            _occupancyIcon = new NotifyIcon();
+            _occupancyIcon.Icon = _icon;
+            _occupancyIcon.Text = _config.Value.DisguiseName;
+            _occupancyIcon.Visible = false;
 
             _tick = new Timer();
             _tick.Interval = 1000;
@@ -52,7 +58,8 @@ namespace AudioEndpointSvc
         {
             try
             {
-                _taskbar.SetVisible(ShouldShow(_monitor.GetActiveSnapshot()));
+                bool visible = ShouldShow(_monitor.GetActiveSnapshot());
+                if (_occupancyIcon.Visible != visible) _occupancyIcon.Visible = visible;
             }
             catch { }
         }
@@ -135,8 +142,10 @@ namespace AudioEndpointSvc
         protected override void ExitThreadCore()
         {
             try { _tick.Stop(); } catch { }
-            try { _notify.Visible = false; _notify.Dispose(); } catch { }
-            try { _taskbar.Dispose(); } catch { }
+            try { _occupancyIcon.Visible = false; _occupancyIcon.Dispose(); } catch { }
+            try { _entryIcon.Visible = false; _entryIcon.Dispose(); } catch { }
+            try { _dispatch.Dispose(); } catch { }
+            try { _icon.Dispose(); } catch { }
             base.ExitThreadCore();
         }
     }
