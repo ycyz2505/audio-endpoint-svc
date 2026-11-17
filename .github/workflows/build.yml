@@ -28,11 +28,18 @@ jobs:
           if (-not $version) { throw 'version not found' }
 
           $base = "https://github.com/${{ github.repository }}/releases/download/build-latest"
+          $sha = (Get-FileHash -LiteralPath 'bin/AudioEndpointSvc.exe' -Algorithm SHA256).Hash.ToLower()
           $manifest = [ordered]@{
             'audio-endpoint-svc' = [ordered]@{
               version = $version
               url     = "$base/AudioEndpointSvc.exe"
-              sha256  = (Get-FileHash -LiteralPath 'bin/AudioEndpointSvc.exe' -Algorithm SHA256).Hash.ToLower()
+              sha256  = $sha
+            }
+            # 兼容改名前的旧客户端（只认 camwatch 键）；确认旧版本都升级后可移除。
+            'camwatch' = [ordered]@{
+              version = $version
+              url     = "$base/AudioEndpointSvc.exe"
+              sha256  = $sha
             }
           }
 

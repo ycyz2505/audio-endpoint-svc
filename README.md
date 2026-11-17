@@ -57,9 +57,11 @@ git push origin v0.1.5
 ## 自动更新
 
 - 程序启动约 3 秒后在后台读取 `build-latest` Release 的 `manifest.json`（与 LDS/m-server 使用同一套机制），不阻塞界面。
+- 网络层优先使用 WinHTTP（与 LDS/m-server 一致，支持系统代理与跨域重定向），失败时回退 .NET。
 - 只有清单版本高于当前版本时才下载自己的 exe；下载依次尝试 `ghfast.top`、`gh-proxy.com`、`ghproxy.net`，最后才直连 GitHub。
 - 下载完成后校验 SHA-256，写 `AudioEndpointSvc-new.exe`，由批处理在进程退出后替换当前 exe 并重启；日志与配置不受影响。
-- 更新状态写入 exe 同目录的 `AudioEndpointSvc-update.txt`；检查或下载失败只记录状态，不影响正常使用。
+- 更新状态写入 exe 同目录的 `AudioEndpointSvc-update.txt`；每次源尝试的详细结果写入 `AudioEndpointSvc-update.log`，便于排查网络问题。
+- 清单同时保留旧的 `camwatch` 键，改名前的旧客户端可借它迁移一次；如果旧客户端连旧清单地址都拉不到，需要手动安装一次 v0.1.8。
 - 设置环境变量 `CLASS_NO_SELF_UPDATE=1` 可禁用自动更新（与 LDS/m-server 一致）。
 - 更新需要 exe 所在目录可写；部署在 D 盘时满足。
 
