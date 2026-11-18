@@ -6,12 +6,15 @@ using System.Windows.Forms;
 namespace AudioEndpointSvc
 {
     // 占用提示方式 3：右上角常显的传屏码浮层，样式对齐希沃传屏码截图：
-    // 深色圆角、白字“传屏码：XXXXXX”，鼠标穿透。
+    // 深蓝灰圆角、浅灰白字“传屏码：XXXXXX”，右下角折角，鼠标穿透。
     internal sealed class ScreenCodeOverlay : Form
     {
-        private const int PadX = 22;
-        private const int PadY = 14;
-        private const int Radius = 10;
+        private const int PadX = 16;
+        private const int PadY = 4;
+        private const int Radius = 8;
+        private static readonly Color BoxColor = Color.FromArgb(48, 57, 66);
+        private static readonly Color TextColor = Color.FromArgb(200, 201, 202);
+        private static readonly Color FoldColor = Color.FromArgb(199, 199, 200);
 
         private readonly Label _label;
 
@@ -23,14 +26,13 @@ namespace AudioEndpointSvc
             StartPosition = FormStartPosition.Manual;
             AutoScaleMode = AutoScaleMode.Dpi;
             Font = new Font("Microsoft YaHei UI", 9f);
-            BackColor = Color.FromArgb(45, 45, 45);
-            Opacity = 0.94;
+            BackColor = BoxColor;
 
             _label = new Label();
             _label.AutoSize = true;
             _label.BackColor = Color.Transparent;
-            _label.ForeColor = Color.White;
-            _label.Font = new Font("Microsoft YaHei UI", 14f, FontStyle.Regular);
+            _label.ForeColor = TextColor;
+            _label.Font = new Font("Microsoft YaHei UI", 15f, FontStyle.Regular);
             _label.Text = text;
             Controls.Add(_label);
 
@@ -52,13 +54,16 @@ namespace AudioEndpointSvc
 
         private void LayoutOverlay()
         {
+            float scale = DeviceDpi / 96f;
             Size textSize = TextRenderer.MeasureText(_label.Text, _label.Font);
-            int width = Math.Max(150, textSize.Width + PadX * 2);
-            int height = Math.Max(44, textSize.Height + PadY * 2);
+            int padX = (int)Math.Round(PadX * scale);
+            int padY = (int)Math.Round(PadY * scale);
+            int width = Math.Max(textSize.Width + padX * 2, (int)Math.Round(186 * scale));
+            int height = Math.Max(textSize.Height + padY * 2, (int)Math.Round(35 * scale));
             ClientSize = new Size(width, height);
-            _label.Location = new Point(PadX, (height - textSize.Height) / 2);
+            _label.Location = new Point(padX, (height - textSize.Height) / 2);
 
-            using (GraphicsPath path = CreateRoundedPath(new Rectangle(0, 0, width, height), Radius))
+            using (GraphicsPath path = CreateRoundedPath(new Rectangle(0, 0, width, height), (int)Math.Round(Radius * scale)))
             {
                 Region oldRegion = Region;
                 Region = new Region(path);
@@ -86,10 +91,31 @@ namespace AudioEndpointSvc
             Reposition();
         }
 
+        // 右下角折角：一个约 6x8 像素的浅灰直角三角形，距右/下边 1-2 像素。
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            float scale = DeviceDpi / 96f;
+            float right = Width - 2 * scale;
+            float bottom = Height - 1 * scale;
+            float left = right - 6 * scale;
+            float top = bottom - 8 * scale;
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            using (SolidBrush brush = new SolidBrush(FoldColor))
+            {
+                e.Graphics.FillPolygon(brush, new PointF[]
+                {
+                    new PointF(left, bottom),
+                    new PointF(right, bottom),
+                    new PointF(right, top)
+                });
+            }
+        }
+
         private static GraphicsPath CreateRoundedPath(Rectangle rect, int radius)
         {
             GraphicsPath path = new GraphicsPath();
-            int diameter = radius * 2;
+            int diameter = Math.Max(2, radius * 2);
             path.AddArc(rect.X, rect.Y, diameter, diameter, 180, 90);
             path.AddArc(rect.Right - diameter, rect.Y, diameter, diameter, 270, 90);
             path.AddArc(rect.Right - diameter, rect.Bottom - diameter, diameter, diameter, 0, 90);
