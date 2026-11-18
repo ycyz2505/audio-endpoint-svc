@@ -68,7 +68,7 @@ namespace AudioEndpointSvc
 
             _displayAppButton = MakeRadio("在任务栏左侧新增一个应用图标");
             _displayTray = MakeRadio("改变托盘图标（全程只保留一个托盘图标）");
-            _displayOverlay = MakeRadio("在右上角常显传屏码样式提示（效果待定）");
+            _displayOverlay = MakeRadio("在右上角常显传屏码浮层");
             display.Controls.Add(_displayAppButton, 0, 0);
             display.Controls.Add(_displayTray, 0, 1);
             display.Controls.Add(_displayOverlay, 0, 2);

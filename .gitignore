@@ -6,4 +6,5 @@ manifest.json
 AudioEndpointSvc-update.txt
 *-new.exe
 update-*.bat
+tmp/
 *.user

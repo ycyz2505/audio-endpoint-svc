@@ -27,7 +27,7 @@ namespace AudioEndpointSvc
             config.TaskbarMode = "any";
             config.TaskbarApps = new List<string>();
             config.DisplayMode = "tray";
-            config.OverlayText = "传屏码 0000";
+            config.OverlayText = "";
             config.RetentionDays = 90;
             config.PollMs = 1000;
             config.DisguiseName = "Realtek 高清晰音频管理器";
@@ -41,7 +41,7 @@ namespace AudioEndpointSvc
             if (TaskbarMode != "only" && TaskbarMode != "exclude") TaskbarMode = "any";
             if (TaskbarApps == null) TaskbarApps = new List<string>();
             if (DisplayMode != "appbutton" && DisplayMode != "overlay") DisplayMode = "tray";
-            if (OverlayText == null || OverlayText.Trim().Length == 0) OverlayText = "传屏码 0000";
+            if (OverlayText == null) OverlayText = "";
             if (RetentionDays < 1 || RetentionDays > 3650) RetentionDays = 90;
             if (PollMs < 500 || PollMs > 60000) PollMs = 1000;
             if (DisguiseName == null || DisguiseName.Trim().Length == 0) DisguiseName = "Realtek 高清晰音频管理器";

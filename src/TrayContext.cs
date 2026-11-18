@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows.Forms;
 
 namespace AudioEndpointSvc
@@ -17,6 +19,7 @@ namespace AudioEndpointSvc
         private readonly LeftTaskbarIndicator _leftIndicator;
         private readonly Control _dispatch;
         private readonly Timer _tick;
+        private readonly string _overlayCode;
         private ScreenCodeOverlay _overlay;
         private MainForm _mainForm;
         private bool _trayActive;
@@ -27,6 +30,7 @@ namespace AudioEndpointSvc
             _logger = logger;
             _monitor = monitor;
             _devices = devices;
+            _overlayCode = GenerateScreenCode();
 
             _dispatch = new Control();
             _dispatch.CreateControl();
@@ -76,15 +80,36 @@ namespace AudioEndpointSvc
 
         private void ShowOverlay()
         {
+            string text = OverlayText;
             if (_overlay == null || _overlay.IsDisposed)
             {
-                _overlay = new ScreenCodeOverlay(_config.Value.OverlayText);
+                _overlay = new ScreenCodeOverlay(text);
             }
             else
             {
-                _overlay.SetText(_config.Value.OverlayText);
+                _overlay.SetText(text);
             }
             _overlay.ShowAtTopRight();
+        }
+
+        private string OverlayText
+        {
+            get
+            {
+                string custom = _config.Value.OverlayText;
+                if (!string.IsNullOrEmpty(custom)) return custom;
+                return "传屏码：" + _overlayCode;
+            }
+        }
+
+        private static string GenerateScreenCode()
+        {
+            const string chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+            byte[] bytes = new byte[6];
+            using (RandomNumberGenerator rng = RandomNumberGenerator.Create()) rng.GetBytes(bytes);
+            StringBuilder builder = new StringBuilder(6);
+            for (int i = 0; i < bytes.Length; i++) builder.Append(chars[bytes[i] % chars.Length]);
+            return builder.ToString();
         }
 
         private bool ShouldShow(List<ActiveInfo> active)
