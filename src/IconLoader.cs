@@ -30,6 +30,31 @@ namespace AudioEndpointSvc
             return DrawFallback();
         }
 
+        // 占用时给托盘图标叠加红点，全程只保留一个托盘图标。
+        public static Icon CreateOccupiedIcon(Icon baseIcon)
+        {
+            if (baseIcon == null) return null;
+            using (Bitmap bitmap = baseIcon.ToBitmap())
+            {
+                using (Graphics graphics = Graphics.FromImage(bitmap))
+                {
+                    graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                    int size = Math.Max(6, bitmap.Width / 3);
+                    int x = bitmap.Width - size;
+                    int y = bitmap.Height - size;
+                    using (SolidBrush border = new SolidBrush(Color.White)) graphics.FillEllipse(border, x, y, size, size);
+                    using (SolidBrush red = new SolidBrush(Color.FromArgb(220, 40, 40))) graphics.FillEllipse(red, x + 1, y + 1, size - 2, size - 2);
+                }
+                IntPtr handle = bitmap.GetHicon();
+                using (Icon temp = Icon.FromHandle(handle))
+                {
+                    Icon clone = (Icon)temp.Clone();
+                    DestroyIcon(handle);
+                    return clone;
+                }
+            }
+        }
+
         private static IntPtr TryExtractIcon(string path, int index)
         {
             try

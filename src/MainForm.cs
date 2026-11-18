@@ -498,17 +498,22 @@ namespace AudioEndpointSvc
                     _liveLabel.Text = builder.ToString();
                 }
 
-                string mode = "全部应用";
-                if (_config.Value.TaskbarMode == "only") mode = "仅名单内应用";
-                else if (_config.Value.TaskbarMode == "exclude") mode = "忽略名单内应用";
+                string display = "托盘图标变色";
+                if (_config.Value.DisplayMode == "appbutton") display = "左侧应用图标";
+                else if (_config.Value.DisplayMode == "overlay") display = "右上角常显";
+
+                string condition = "全部应用";
+                if (_config.Value.TaskbarMode == "only") condition = "仅名单内应用";
+                else if (_config.Value.TaskbarMode == "exclude") condition = "忽略名单内应用";
+
                 List<DeviceEntry> devices = _devices.Snapshot();
                 string deviceText;
                 if (devices.Count == 0) deviceText = "未检测到摄像头";
                 else if (devices.Count == 1) deviceText = devices[0].Name;
                 else deviceText = devices.Count + " 个摄像头（设备归因未知）";
 
-                _statsLabel.Text = _statsLabel.Text.Split(new string[] { "    占用指示" }, StringSplitOptions.None)[0]
-                    + "    占用指示：" + mode + "    设备：" + deviceText;
+                _statsLabel.Text = _statsLabel.Text.Split(new string[] { "    提示：" }, StringSplitOptions.None)[0]
+                    + "    提示：" + display + "（" + condition + "）    设备：" + deviceText;
             }
             catch { }
         }

@@ -13,6 +13,8 @@ namespace AudioEndpointSvc
         [DataMember(Name = "passwordSalt")] public string PasswordSalt;
         [DataMember(Name = "taskbarMode")] public string TaskbarMode;
         [DataMember(Name = "taskbarApps")] public List<string> TaskbarApps;
+        [DataMember(Name = "displayMode")] public string DisplayMode;
+        [DataMember(Name = "overlayText")] public string OverlayText;
         [DataMember(Name = "retentionDays")] public int RetentionDays;
         [DataMember(Name = "pollMs")] public int PollMs;
         [DataMember(Name = "disguiseName")] public string DisguiseName;
@@ -24,6 +26,8 @@ namespace AudioEndpointSvc
             config.PasswordSalt = "";
             config.TaskbarMode = "any";
             config.TaskbarApps = new List<string>();
+            config.DisplayMode = "tray";
+            config.OverlayText = "传屏码 0000";
             config.RetentionDays = 90;
             config.PollMs = 1000;
             config.DisguiseName = "Realtek 高清晰音频管理器";
@@ -36,6 +40,8 @@ namespace AudioEndpointSvc
             if (PasswordSalt == null) PasswordSalt = "";
             if (TaskbarMode != "only" && TaskbarMode != "exclude") TaskbarMode = "any";
             if (TaskbarApps == null) TaskbarApps = new List<string>();
+            if (DisplayMode != "appbutton" && DisplayMode != "overlay") DisplayMode = "tray";
+            if (OverlayText == null || OverlayText.Trim().Length == 0) OverlayText = "传屏码 0000";
             if (RetentionDays < 1 || RetentionDays > 3650) RetentionDays = 90;
             if (PollMs < 500 || PollMs > 60000) PollMs = 1000;
             if (DisguiseName == null || DisguiseName.Trim().Length == 0) DisguiseName = "Realtek 高清晰音频管理器";

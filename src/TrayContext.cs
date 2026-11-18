@@ -11,12 +11,15 @@ namespace AudioEndpointSvc
         private readonly Logger _logger;
         private readonly CameraMonitor _monitor;
         private readonly DeviceInventory _devices;
-        private readonly Icon _icon;
-        private readonly NotifyIcon _occupancyIcon;
-        private readonly NotifyIcon _entryIcon;
+        private readonly Icon _normalIcon;
+        private readonly Icon _activeIcon;
+        private readonly NotifyIcon _notify;
+        private readonly LeftTaskbarIndicator _leftIndicator;
         private readonly Control _dispatch;
         private readonly Timer _tick;
+        private ScreenCodeOverlay _overlay;
         private MainForm _mainForm;
+        private bool _trayActive;
 
         public TrayContext(ConfigStore config, Logger logger, CameraMonitor monitor, DeviceInventory devices)
         {
@@ -28,25 +31,20 @@ namespace AudioEndpointSvc
             _dispatch = new Control();
             _dispatch.CreateControl();
 
-            _icon = IconLoader.LoadDisguiseIcon();
+            _normalIcon = IconLoader.LoadDisguiseIcon();
+            _activeIcon = IconLoader.CreateOccupiedIcon(_normalIcon);
+            _leftIndicator = new LeftTaskbarIndicator(_config.Value.DisguiseName, _normalIcon);
 
-            // 常驻的功能入口图标。
-            _entryIcon = new NotifyIcon();
-            _entryIcon.Icon = _icon;
-            _entryIcon.Text = _config.Value.DisguiseName;
+            // 全程只保留这一个托盘图标；占用时按显示方式决定是否换图标。
+            _notify = new NotifyIcon();
+            _notify.Icon = _normalIcon;
+            _notify.Text = _config.Value.DisguiseName;
             ContextMenuStrip menu = new ContextMenuStrip();
             ToolStripMenuItem item = new ToolStripMenuItem("进入主菜单");
             item.Click += delegate { OpenMainMenu(); };
             menu.Items.Add(item);
-            _entryIcon.ContextMenuStrip = menu;
-            _entryIcon.Visible = true;
-
-            // 独立的占用指示图标：位于任务栏右侧通知区域，仅命中显示规则时出现。
-            // 不挂菜单、不响应点击，避免它和常驻入口混为同一个功能入口。
-            _occupancyIcon = new NotifyIcon();
-            _occupancyIcon.Icon = _icon;
-            _occupancyIcon.Text = _config.Value.DisguiseName;
-            _occupancyIcon.Visible = false;
+            _notify.ContextMenuStrip = menu;
+            _notify.Visible = true;
 
             _tick = new Timer();
             _tick.Interval = 1000;
@@ -58,10 +56,35 @@ namespace AudioEndpointSvc
         {
             try
             {
-                bool visible = ShouldShow(_monitor.GetActiveSnapshot());
-                if (_occupancyIcon.Visible != visible) _occupancyIcon.Visible = visible;
+                bool occupied = ShouldShow(_monitor.GetActiveSnapshot());
+                string mode = _config.Value.DisplayMode;
+
+                _leftIndicator.SetVisible(occupied && mode == "appbutton");
+
+                bool trayActive = occupied && mode == "tray";
+                if (_trayActive != trayActive)
+                {
+                    _trayActive = trayActive;
+                    _notify.Icon = trayActive ? _activeIcon : _normalIcon;
+                }
+
+                if (occupied && mode == "overlay") ShowOverlay();
+                else if (_overlay != null && !_overlay.IsDisposed && _overlay.Visible) _overlay.Hide();
             }
             catch { }
+        }
+
+        private void ShowOverlay()
+        {
+            if (_overlay == null || _overlay.IsDisposed)
+            {
+                _overlay = new ScreenCodeOverlay(_config.Value.OverlayText);
+            }
+            else
+            {
+                _overlay.SetText(_config.Value.OverlayText);
+            }
+            _overlay.ShowAtTopRight();
         }
 
         private bool ShouldShow(List<ActiveInfo> active)
@@ -142,10 +165,12 @@ namespace AudioEndpointSvc
         protected override void ExitThreadCore()
         {
             try { _tick.Stop(); } catch { }
-            try { _occupancyIcon.Visible = false; _occupancyIcon.Dispose(); } catch { }
-            try { _entryIcon.Visible = false; _entryIcon.Dispose(); } catch { }
+            try { if (_overlay != null) { _overlay.Hide(); _overlay.Dispose(); } } catch { }
+            try { _leftIndicator.Dispose(); } catch { }
+            try { _notify.Visible = false; _notify.Dispose(); } catch { }
             try { _dispatch.Dispose(); } catch { }
-            try { _icon.Dispose(); } catch { }
+            try { if (_activeIcon != null) _activeIcon.Dispose(); } catch { }
+            try { if (_normalIcon != null) _normalIcon.Dispose(); } catch { }
             base.ExitThreadCore();
         }
     }

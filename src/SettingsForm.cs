@@ -8,6 +8,9 @@ namespace AudioEndpointSvc
     internal sealed class SettingsForm : Form
     {
         private readonly ConfigStore _config;
+        private readonly RadioButton _displayAppButton;
+        private readonly RadioButton _displayTray;
+        private readonly RadioButton _displayOverlay;
         private readonly RadioButton _modeAny;
         private readonly RadioButton _modeOnly;
         private readonly RadioButton _modeExclude;
@@ -27,26 +30,54 @@ namespace AudioEndpointSvc
             ShowInTaskbar = false;
             AutoScaleMode = AutoScaleMode.Dpi;
             Font = new Font("Microsoft YaHei UI", 9f);
-            ClientSize = new Size(560, 610);
-            MinimumSize = new Size(520, 520);
+            ClientSize = new Size(560, 720);
+            MinimumSize = new Size(520, 660);
             BackColor = Color.White;
 
             TableLayoutPanel root = new TableLayoutPanel();
             root.Dock = DockStyle.Fill;
             root.Padding = new Padding(12);
             root.ColumnCount = 1;
-            root.RowCount = 3;
+            root.RowCount = 4;
             root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));
+            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             root.RowStyles.Add(new RowStyle(SizeType.Percent, 100f));
             root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             Controls.Add(root);
 
+            GroupBox displayGroup = new GroupBox();
+            displayGroup.Text = "占用提示方式";
+            displayGroup.Dock = DockStyle.Top;
+            displayGroup.AutoSize = true;
+            displayGroup.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            displayGroup.Padding = new Padding(12, 8, 12, 10);
+            displayGroup.Margin = new Padding(0, 0, 0, 8);
+            root.Controls.Add(displayGroup, 0, 0);
+
+            TableLayoutPanel display = new TableLayoutPanel();
+            display.Dock = DockStyle.Fill;
+            display.AutoSize = true;
+            display.ColumnCount = 1;
+            display.RowCount = 3;
+            display.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));
+            display.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            display.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            display.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            displayGroup.Controls.Add(display);
+
+            _displayAppButton = MakeRadio("在任务栏左侧新增一个应用图标");
+            _displayTray = MakeRadio("改变托盘图标（全程只保留一个托盘图标）");
+            _displayOverlay = MakeRadio("在右上角常显传屏码样式提示（效果待定）");
+            display.Controls.Add(_displayAppButton, 0, 0);
+            display.Controls.Add(_displayTray, 0, 1);
+            display.Controls.Add(_displayOverlay, 0, 2);
+
             GroupBox ruleGroup = new GroupBox();
-            ruleGroup.Text = "占用指示图标显示规则（只影响图标，不影响日志记录）";
+            ruleGroup.Text = "占用提示显示条件（只影响提示，不影响日志记录）";
             ruleGroup.Dock = DockStyle.Fill;
             ruleGroup.Padding = new Padding(12, 8, 12, 12);
-            root.Controls.Add(ruleGroup, 0, 0);
+            root.Controls.Add(ruleGroup, 0, 1);
 
             TableLayoutPanel rules = new TableLayoutPanel();
             rules.Dock = DockStyle.Fill;
@@ -62,9 +93,9 @@ namespace AudioEndpointSvc
             rules.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             ruleGroup.Controls.Add(rules);
 
-            _modeAny = MakeRadio("任何应用占用摄像头都显示");
-            _modeOnly = MakeRadio("仅名单内应用占用时显示");
-            _modeExclude = MakeRadio("忽略名单内应用的占用（其他应用照常显示）");
+            _modeAny = MakeRadio("任何应用占用摄像头都提示");
+            _modeOnly = MakeRadio("仅名单内应用占用时提示");
+            _modeExclude = MakeRadio("忽略名单内应用的占用（其他应用照常提示）");
             rules.Controls.Add(_modeAny, 0, 0);
             rules.Controls.Add(_modeOnly, 0, 1);
             rules.Controls.Add(_modeExclude, 0, 2);
@@ -129,7 +160,7 @@ namespace AudioEndpointSvc
             options.Controls.Add(retentionLabel);
             options.Controls.Add(_retention);
             options.Controls.Add(change);
-            root.Controls.Add(options, 0, 1);
+            root.Controls.Add(options, 0, 2);
 
             FlowLayoutPanel actions = new FlowLayoutPanel();
             actions.Dock = DockStyle.Fill;
@@ -142,7 +173,7 @@ namespace AudioEndpointSvc
             ok.Click += delegate { SaveAndClose(); };
             actions.Controls.Add(cancel);
             actions.Controls.Add(ok);
-            root.Controls.Add(actions, 0, 2);
+            root.Controls.Add(actions, 0, 3);
             AcceptButton = ok;
             CancelButton = cancel;
 
@@ -166,6 +197,11 @@ namespace AudioEndpointSvc
                     _apps.Items.Add(choice, isChecked);
                 }
             }
+
+            string displayMode = config.Value.DisplayMode;
+            _displayOverlay.Checked = displayMode == "overlay";
+            _displayAppButton.Checked = displayMode == "appbutton";
+            _displayTray.Checked = !_displayOverlay.Checked && !_displayAppButton.Checked;
 
             string mode = config.Value.TaskbarMode;
             _modeOnly.Checked = mode == "only";
@@ -217,6 +253,11 @@ namespace AudioEndpointSvc
 
         private void SaveAndClose()
         {
+            string displayMode = "tray";
+            if (_displayAppButton.Checked) displayMode = "appbutton";
+            else if (_displayOverlay.Checked) displayMode = "overlay";
+            _config.Value.DisplayMode = displayMode;
+
             string mode = "any";
             if (_modeOnly.Checked) mode = "only";
             else if (_modeExclude.Checked) mode = "exclude";
