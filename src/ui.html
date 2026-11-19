@@ -136,16 +136,22 @@ button { outline: none; }
 .section { padding: 16px 0 4px; border-bottom: 1px solid #E1E5DF; }
 .section:last-child { border-bottom: none; }
 .section-title { font-size: 12px; font-weight: 600; color: #161B18; margin-bottom: 6px; }
-.choice { display: block; padding: 10px 0; border-bottom: 1px solid #E7EAE4; font-size: 12.5px; color: #161B18; cursor: pointer; }
+.choice { display: block; position: relative; padding: 10px 0; border-bottom: 1px solid #E7EAE4; font-size: 12.5px; color: #161B18; cursor: pointer; }
 .choice:last-child { border-bottom: none; }
 .choice:hover { color: #1F5F53; }
-.choice input { margin-right: 9px; vertical-align: -2px; }
+.choice input, .check-item input { position: absolute; left: 0; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 0; opacity: 0; cursor: pointer; }
+.ind { display: inline-block; width: 14px; height: 14px; border: 1px solid #9AA19B; border-radius: 50%; background: #fff; vertical-align: -2px; margin-right: 9px; position: relative; }
+.check-item .ind { border-radius: 2px; }
+input:checked + .ind { border-color: #1F5F53; }
+input[type=radio]:checked + .ind:after { content: ""; position: absolute; left: 3px; top: 3px; width: 6px; height: 6px; border-radius: 50%; background: #1F5F53; }
+input[type=checkbox]:checked + .ind { background: #1F5F53; }
+input[type=checkbox]:checked + .ind:after { content: ""; position: absolute; left: 4px; top: 0; width: 4px; height: 8px; border: solid #fff; border-width: 0 1.5px 1.5px 0; -ms-transform: rotate(45deg); transform: rotate(45deg); }
+input:focus + .ind { outline: 1px solid #1F5F53; outline-offset: 2px; }
 .hint { font-size: 11px; color: #9AA19B; margin-top: 8px; line-height: 1.7; }
 .checklist { max-height: 170px; overflow: auto; margin-top: 6px; }
-.check-item { display: block; padding: 7px 0; border-bottom: 1px solid #E7EAE4; font-size: 12px; color: #161B18; cursor: pointer; }
+.check-item { display: block; position: relative; padding: 7px 0; border-bottom: 1px solid #E7EAE4; font-size: 12px; color: #161B18; cursor: pointer; }
 .check-item:last-child { border-bottom: none; }
 .check-item:hover { color: #1F5F53; }
-.check-item input { margin-right: 9px; vertical-align: -2px; }
 .inline { margin-top: 10px; overflow: hidden; }
 .inline .field { float: left; width: 74%; }
 .inline .btn { float: right; width: 23%; padding: 8px 0; }
@@ -311,16 +317,16 @@ button:focus, select:focus, input:focus { outline: 1px solid #1F5F53; outline-of
     <div class="drawer-body">
       <div class="section">
         <div class="section-title">占用提示方式</div>
-        <label class="choice"><input type="radio" name="displayMode" value="appbutton">在任务栏左侧新增一个应用图标</label>
-        <label class="choice"><input type="radio" name="displayMode" value="tray">改变托盘图标（全程只保留一个托盘图标）</label>
-        <label class="choice"><input type="radio" name="displayMode" value="overlay">在右上角常显传屏码浮层</label>
+        <label class="choice"><input type="radio" name="displayMode" value="appbutton"><span class="ind"></span>在任务栏左侧新增一个应用图标</label>
+        <label class="choice"><input type="radio" name="displayMode" value="tray"><span class="ind"></span>改变托盘图标（全程只保留一个托盘图标）</label>
+        <label class="choice"><input type="radio" name="displayMode" value="overlay"><span class="ind"></span>在右上角常显传屏码浮层</label>
       </div>
 
       <div class="section">
         <div class="section-title">提示条件</div>
-        <label class="choice"><input type="radio" name="taskbarMode" value="any">任何应用占用摄像头都提示</label>
-        <label class="choice"><input type="radio" name="taskbarMode" value="only">仅名单内应用占用时提示</label>
-        <label class="choice"><input type="radio" name="taskbarMode" value="exclude">忽略名单内应用的占用（其他应用照常提示）</label>
+        <label class="choice"><input type="radio" name="taskbarMode" value="any"><span class="ind"></span>任何应用占用摄像头都提示</label>
+        <label class="choice"><input type="radio" name="taskbarMode" value="only"><span class="ind"></span>仅名单内应用占用时提示</label>
+        <label class="choice"><input type="radio" name="taskbarMode" value="exclude"><span class="ind"></span>忽略名单内应用的占用（其他应用照常提示）</label>
         <div class="hint">显示条件的名单与日志无关；被忽略的应用仍会完整记录。</div>
       </div>
 
@@ -368,7 +374,7 @@ button:focus, select:focus, input:focus { outline: 1px solid #1F5F53; outline-of
 <script>
 var nowMs = new Date().getTime();
 var MOCK = {
-  version: "0.3.0.0",
+  version: "0.3.1.0",
   hasPassword: true,
   disguiseName: "Realtek 高清晰音频管理器",
   user: "CLASS01\\student",
@@ -741,7 +747,7 @@ function buildSettingsAppList() {
   for (i = 0; i < keys.length; i++) {
     var checked = false;
     for (var j = 0; j < apps.length; j++) if (apps[j] === keys[i]) checked = true;
-    html.push('<label class="check-item"><input type="checkbox" value="' + escapeHtml(keys[i]) + '"' + (checked ? " checked" : "") + "> " + escapeHtml(map[keys[i]]) + " (" + escapeHtml(keys[i]) + ")</label>");
+    html.push('<label class="check-item"><input type="checkbox" value="' + escapeHtml(keys[i]) + '"' + (checked ? " checked" : "") + '><span class="ind"></span> ' + escapeHtml(map[keys[i]]) + " (" + escapeHtml(keys[i]) + ")</label>");
   }
   byId("appList").innerHTML = html.join("");
 }
@@ -762,6 +768,9 @@ function addManualApp() {
   checkbox.value = value;
   checkbox.checked = true;
   label.appendChild(checkbox);
+  var indicator = document.createElement("span");
+  indicator.className = "ind";
+  label.appendChild(indicator);
   label.appendChild(document.createTextNode(" " + value));
   list.appendChild(label);
   input.value = "";
