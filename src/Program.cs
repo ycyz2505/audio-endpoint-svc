@@ -9,8 +9,8 @@ using Microsoft.Win32;
 [assembly: AssemblyTitle("Realtek 高清晰音频管理器")]
 [assembly: AssemblyDescription("Realtek 高清晰音频管理器")]
 [assembly: AssemblyProduct("Realtek 高清晰音频管理器")]
-[assembly: AssemblyVersion("0.3.1.0")]
-[assembly: AssemblyFileVersion("0.3.1.0")]
+[assembly: AssemblyVersion("0.3.2.0")]
+[assembly: AssemblyFileVersion("0.3.2.0")]
 
 namespace AudioEndpointSvc
 {

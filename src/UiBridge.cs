@@ -55,7 +55,6 @@ namespace AudioEndpointSvc
         [DataMember(Name = "config")] public UiConfig Config;
         [DataMember(Name = "sessions")] public List<UiSession> Sessions;
         [DataMember(Name = "devices")] public List<string> Devices;
-        [DataMember(Name = "active")] public List<UiActive> Active;
         [DataMember(Name = "user")] public string User;
         [DataMember(Name = "disguiseName")] public string DisguiseName;
     }
@@ -102,8 +101,40 @@ namespace AudioEndpointSvc
             data.DisguiseName = _config.Value.DisguiseName;
             data.Sessions = LoadSessions();
             data.Devices = LoadDevices(data.Sessions);
-            data.Active = ActiveSessions();
             return Json.ToLine(data);
+        }
+
+        // 页面轮询用：只有日志/配置/设备发生变化时才返回新版本号。
+        public string GetDataVersion()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(UpdateChecker.CurrentVersion).Append('|');
+            builder.Append(_config.HasPassword ? '1' : '0').Append('|');
+            builder.Append(_config.Value.DisplayMode).Append('|');
+            builder.Append(_config.Value.TaskbarMode).Append('|');
+            builder.Append(_config.Value.RetentionDays).Append('|');
+            builder.Append(_config.Value.OverlayText).Append('|');
+            List<string> apps = _config.Value.TaskbarApps;
+            if (apps != null)
+            {
+                for (int i = 0; i < apps.Count; i++) builder.Append(apps[i]).Append(',');
+            }
+            builder.Append('|');
+            try
+            {
+                string[] files = Directory.GetFiles(_logger.LogDirectory, "*.jsonl");
+                Array.Sort(files, StringComparer.OrdinalIgnoreCase);
+                for (int i = 0; i < files.Length; i++)
+                {
+                    FileInfo info = new FileInfo(files[i]);
+                    builder.Append(info.Name).Append(':').Append(info.Length).Append(':').Append(info.LastWriteTimeUtc.Ticks).Append(';');
+                }
+            }
+            catch { }
+            builder.Append('|');
+            List<DeviceEntry> inventory = _devices.Snapshot();
+            for (int i = 0; i < inventory.Count; i++) builder.Append(inventory[i].Name).Append(',');
+            return builder.ToString();
         }
 
         public string GetLive()

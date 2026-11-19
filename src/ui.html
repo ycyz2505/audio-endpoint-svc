@@ -221,7 +221,6 @@ button:focus, select:focus, input:focus { outline: 1px solid #1F5F53; outline-of
     </div>
     <div class="masthead-right">
       <span id="ver" class="version"></span>
-      <button class="ghost" onclick="reloadData()">刷新</button>
       <button class="ghost" onclick="openSettings()">设置</button>
     </div>
   </div>
@@ -374,7 +373,7 @@ button:focus, select:focus, input:focus { outline: 1px solid #1F5F53; outline-of
 <script>
 var nowMs = new Date().getTime();
 var MOCK = {
-  version: "0.3.1.0",
+  version: "0.3.2.0",
   hasPassword: true,
   disguiseName: "Realtek 高清晰音频管理器",
   user: "CLASS01\\student",
@@ -390,6 +389,7 @@ var MOCK = {
 
 var MOCK_API = {
   GetBootstrap: function () { return JSON.stringify(MOCK); },
+  GetDataVersion: function () { return "mock"; },
   GetLive: function () {
     return JSON.stringify({ active: [{ app: "微信", identity: "WeChat.exe", device: "Integrated Camera", seconds: 83 }] });
   },
@@ -414,6 +414,8 @@ var devices = [];
 var programList = [];
 var hasPassword = true;
 var liveTimer = null;
+var dataTimer = null;
+var lastDataVersion = null;
 var currentRange = "today";
 var confirmAction = null;
 
@@ -482,12 +484,35 @@ function enterApp() {
   byId("app").className = "";
   reloadData();
   updateLive();
-  if (!liveTimer) liveTimer = setInterval(updateLive, 5000);
+  if (!liveTimer) liveTimer = setInterval(updateLive, 1000);
+  if (!dataTimer) dataTimer = setInterval(refreshData, 3000);
 }
 
 function reloadData() {
   try { boot = JSON.parse(api.GetBootstrap()); }
   catch (e) { showToast("读取数据失败", true); return; }
+  try { lastDataVersion = api.GetDataVersion(); } catch (e) { lastDataVersion = null; }
+  config = boot.config || {};
+  allSessions = boot.sessions || [];
+  devices = boot.devices || [];
+  hasPassword = !!boot.hasPassword;
+  byId("ver").innerHTML = "v" + escapeHtml(boot.version || "");
+  buildAppOptions();
+  buildDeviceOptions();
+  render();
+}
+
+// 实时刷新：只比对数据版本号，有变化才重新读取并渲染。
+function refreshData() {
+  var version;
+  try { version = api.GetDataVersion(); } catch (e) { return; }
+  if (version === lastDataVersion) return;
+  var raw;
+  try { raw = api.GetBootstrap(); } catch (e) { return; }
+  var next;
+  try { next = JSON.parse(raw); } catch (e) { return; }
+  lastDataVersion = version;
+  boot = next;
   config = boot.config || {};
   allSessions = boot.sessions || [];
   devices = boot.devices || [];
@@ -849,6 +874,7 @@ function init() {
     byId("loginError").innerHTML = "读取数据失败，请关闭后重试";
     return;
   }
+  try { lastDataVersion = api.GetDataVersion(); } catch (e) { lastDataVersion = null; }
   config = boot.config || {};
   allSessions = boot.sessions || [];
   devices = boot.devices || [];
