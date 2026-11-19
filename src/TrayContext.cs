@@ -21,7 +21,7 @@ namespace AudioEndpointSvc
         private readonly Timer _tick;
         private readonly string _overlayCode;
         private ScreenCodeOverlay _overlay;
-        private MainForm _mainForm;
+        private HtmlUiForm _mainForm;
         private bool _trayActive;
 
         public TrayContext(ConfigStore config, Logger logger, CameraMonitor monitor, DeviceInventory devices)
@@ -158,11 +158,7 @@ namespace AudioEndpointSvc
                     _mainForm.Activate();
                     return;
                 }
-                using (PasswordForm dialog = new PasswordForm(_config))
-                {
-                    if (dialog.ShowDialog() != DialogResult.OK) return;
-                }
-                _mainForm = new MainForm(_config, _logger, _monitor, _devices, delegate { Application.Exit(); });
+                _mainForm = new HtmlUiForm(_config, _logger, _monitor, _devices, delegate { Application.Exit(); });
                 _mainForm.FormClosed += delegate { _mainForm = null; };
                 _mainForm.Show();
                 _mainForm.Activate();

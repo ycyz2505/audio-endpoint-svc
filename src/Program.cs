@@ -1,14 +1,16 @@
 using System;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using Microsoft.Win32;
 
 [assembly: AssemblyTitle("Realtek 高清晰音频管理器")]
 [assembly: AssemblyDescription("Realtek 高清晰音频管理器")]
 [assembly: AssemblyProduct("Realtek 高清晰音频管理器")]
-[assembly: AssemblyVersion("0.1.11.0")]
-[assembly: AssemblyFileVersion("0.1.11.0")]
+[assembly: AssemblyVersion("0.2.0.0")]
+[assembly: AssemblyFileVersion("0.2.0.0")]
 
 namespace AudioEndpointSvc
 {
@@ -29,6 +31,7 @@ namespace AudioEndpointSvc
                 {
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
+                    EnableIe11Emulation();
 
                     string baseDir = AppDomain.CurrentDomain.BaseDirectory;
                     ConfigStore config = new ConfigStore(baseDir);
@@ -67,5 +70,19 @@ namespace AudioEndpointSvc
 
         [DllImport("ole32.dll")]
         private static extern void CoUninitialize();
+
+        // 让内置 WebBrowser 以 IE11 模式渲染 HTML 界面。
+        private static void EnableIe11Emulation()
+        {
+            try
+            {
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION"))
+                {
+                    string exeName = Path.GetFileName(Application.ExecutablePath);
+                    if (!string.IsNullOrEmpty(exeName)) key.SetValue(exeName, 11001, RegistryValueKind.DWord);
+                }
+            }
+            catch { }
+        }
     }
 }

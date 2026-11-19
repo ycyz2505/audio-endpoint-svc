@@ -7,4 +7,5 @@ AudioEndpointSvc-update.txt
 *-new.exe
 update-*.bat
 tmp/
+.claude/
 *.user

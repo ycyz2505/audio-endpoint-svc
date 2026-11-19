@@ -39,17 +39,6 @@ namespace AudioEndpointSvc
         }
     }
 
-    internal sealed class AppChoice
-    {
-        public string Identity;
-        public string Display;
-
-        public override string ToString()
-        {
-            return Display;
-        }
-    }
-
     internal sealed class LogStore
     {
         private readonly Logger _logger;

@@ -11,6 +11,7 @@
 
 ## 功能
 
+- 主菜单、登录、设置、日志查看均为内置 HTML 界面（系统自带 WebBrowser/IE11 内核，无需安装浏览器或额外运行时）。
 - 摄像头占用实时检测（默认 1 秒轮询，CPU 占用≈0）。
 - 记录：应用名、完整路径（UWP 为包族名）、PID、Windows 账户、开始/结束时间、时长、摄像头设备（单摄像头时精确归因，多摄像头时标注无法归因）。
 - 全程只保留一个托盘图标（伪装为 Realtek 音频组件），右键菜单只有「进入主菜单」；主菜单需口令，内含筛选（时间范围、程序、设备）、按程序汇总（次数、总时长、平均、最长、最近一次）、导出 CSV、清理日志、修改口令，以及唯一的正常退出入口。
@@ -35,7 +36,7 @@
 
 ## 构建
 
-本仓库使用 GitHub Actions 在 `windows-latest` 上构建（系统自带 .NET Framework 4.8 的 `csc.exe`，无外部依赖）。推送代码即触发 CI，产物为 `bin/AudioEndpointSvc.exe`（同时上传为构建产物）。
+本仓库使用 GitHub Actions 在 `windows-latest` 上构建（系统自带 .NET Framework 4.8 的 `csc.exe`，无外部依赖）。推送代码即触发 CI，产物为 `bin/AudioEndpointSvc.exe`（同时上传为构建产物）。HTML 界面以嵌入资源 `AudioEndpointSvc.ui.html` 打包进 exe，部署时仍然只有一个文件。
 
 本地构建（可选）：
 
@@ -88,12 +89,14 @@ git push origin v0.1.5
 - 方式 1 使用 APPWINDOW 隐形窗口，会同时出现在 Alt+Tab（标题与图标同为伪装名）。
 - 方式 3 的传屏码为本地随机生成，仅用于视觉伪装，不参与实际传屏；浮层鼠标穿透、不可交互。
 - 托盘图标可能被用户的任务栏设置收进 `^` 溢出区，应用无法通过受支持的 API 强制固定在音量/网络旁边。
+- HTML 界面由系统 WebBrowser（IE11 内核）渲染，不支持最新的 CSS/JS 特性；若系统禁用 IE 内核，界面会提示资源加载失败。
 - 学生若使用任务管理器仍可能发现进程——本工具不做对抗。
 
 ## 目录
 
 ```
 src/                  C# 源码（.NET Framework 4.8，系统自带 csc 编译）
+src/ui.html           HTML 前端（嵌入 exe 资源）
 build.ps1             本机构建脚本
 .github/workflows/    CI：构建 + 标签触发自动 Release
 ```

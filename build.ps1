@@ -25,6 +25,7 @@ $arguments = @(
     '/codepage:65001',
     ('/out:' + (Join-Path $OutDir 'AudioEndpointSvc.exe')),
     ('/win32manifest:' + (Join-Path $PSScriptRoot 'src\app.manifest')),
+    ('/resource:' + (Join-Path $PSScriptRoot 'src\ui.html') + ',AudioEndpointSvc.ui.html'),
     ('/lib:' + $frameworkDir)
 )
 foreach ($reference in $references) {
