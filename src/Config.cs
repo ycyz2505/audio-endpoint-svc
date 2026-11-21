@@ -15,6 +15,7 @@ namespace AudioEndpointSvc
         [DataMember(Name = "taskbarApps")] public List<string> TaskbarApps;
         [DataMember(Name = "displayMode")] public string DisplayMode;
         [DataMember(Name = "overlayText")] public string OverlayText;
+        [DataMember(Name = "overlayX")] public int? OverlayX;
         [DataMember(Name = "retentionDays")] public int RetentionDays;
         [DataMember(Name = "pollMs")] public int PollMs;
         [DataMember(Name = "disguiseName")] public string DisguiseName;

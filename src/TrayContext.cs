@@ -83,13 +83,17 @@ namespace AudioEndpointSvc
             string text = OverlayText;
             if (_overlay == null || _overlay.IsDisposed)
             {
-                _overlay = new ScreenCodeOverlay(text);
+                _overlay = new ScreenCodeOverlay(text, _config.Value.OverlayX, delegate(int x)
+                {
+                    _config.Value.OverlayX = x;
+                    _config.Save();
+                });
             }
             else
             {
                 _overlay.SetText(text);
             }
-            _overlay.ShowAtTopRight();
+            _overlay.ShowAtTop();
         }
 
         private string OverlayText
