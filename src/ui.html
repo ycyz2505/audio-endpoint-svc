@@ -190,71 +190,77 @@ button:focus, select:focus, input:focus { outline: 1px solid #1F5F53; outline-of
   .drawer { transition: none; }
 }
 
-/* ===== 仿真 Realtek 高清晰音频管理器（伪装页） ===== */
-.rt-root { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 10; background: #EDF1F5; color: #1F2A36; font-family: "Microsoft YaHei UI", "Microsoft YaHei", "Segoe UI", sans-serif; font-size: 12.5px; }
-.rt-header { height: 60px; padding: 0 16px; background: linear-gradient(#2F6FA8, #1F4E79); color: #FFFFFF; overflow: hidden; }
-.rt-logo { float: left; width: 30px; height: 30px; margin: 15px 10px 0 0; display: none; }
-.rt-brand { float: left; margin-top: 10px; }
-.rt-name { font-size: 19px; font-weight: 600; letter-spacing: .3px; line-height: 1.2; }
-.rt-sub { font-size: 12px; color: #D6E4F2; margin-top: 1px; }
-.rt-header-right { float: right; margin-top: 22px; font-size: 11px; color: #C6D8EA; letter-spacing: .4px; }
-.rt-tabs { height: 38px; padding: 8px 12px 0; background: #DEE4EB; border-bottom: 1px solid #A9B5C2; }
-.rt-tab { display: inline-block; padding: 6px 15px; margin-right: 3px; background: #D2DAE4; border: 1px solid #A9B5C2; border-bottom: none; color: #2C3A49; font-size: 12.5px; cursor: pointer; border-radius: 3px 3px 0 0; }
-.rt-tab.active { background: #F7F9FB; border-top: 2px solid #2F6FA8; color: #1F4E79; font-weight: 600; padding-top: 5px; }
-.rt-body { position: absolute; top: 98px; bottom: 54px; left: 0; right: 0; overflow: auto; padding: 14px; background: #EDF1F5; }
-.rt-panel { display: none; background: #FFFFFF; border: 1px solid #C4CFDB; padding: 18px; min-height: 100%; }
+/* ===== 经典 Realtek HD Audio Manager 仿真页（深色） ===== */
+.rt-root { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 10; background: #1B1B1B; color: #D6D6D6; font-family: Tahoma, "Microsoft YaHei UI", "Microsoft YaHei", sans-serif; font-size: 12px; }
+.rt-header { height: 86px; padding: 10px 18px 0; background: linear-gradient(#363636, #232323); border-bottom: 1px solid #111111; overflow: hidden; }
+.rt-logo-wrap { float: left; width: 200px; margin-top: 5px; }
+.rt-logo { float: left; width: 34px; height: 34px; margin: 6px 10px 0 0; display: none; }
+.rt-wordmark { font-size: 21px; font-weight: bold; color: #CFE0F0; letter-spacing: .4px; line-height: 1.1; }
+.rt-wordmark .rt-dot { color: #E36C0A; }
+.rt-sub { font-size: 11px; color: #8F8F8F; margin-top: 2px; }
+.rt-devices { float: left; margin-left: 24px; }
+.rt-device-item { display: inline-block; width: 158px; padding: 1px 4px 6px; text-align: center; color: #8F8F8F; cursor: pointer; border-bottom: 3px solid transparent; vertical-align: top; }
+.rt-device-item.active { color: #F0F0F0; border-bottom-color: #E36C0A; }
+.rt-device-icon { height: 32px; line-height: 32px; }
+.rt-device-icon svg { vertical-align: middle; }
+.rt-device-item.active .rt-device-icon path, .rt-device-item.active .rt-device-icon rect, .rt-device-item.active .rt-device-icon circle { stroke: #F0F0F0; }
+.rt-device-label { font-size: 11px; margin-top: 1px; white-space: nowrap; }
+.rt-device-label .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #3FA13F; margin-left: 4px; vertical-align: 1px; }
+.rt-device-label .dot.orange { background: #E36C0A; }
+.rt-brand-right { float: right; margin-top: 20px; color: #C8C8C8; font-size: 15px; font-weight: bold; letter-spacing: 1px; }
+
+.rt-tabs { height: 35px; background: #151515; border-bottom: 1px solid #3A3A3A; padding: 0 18px; }
+.rt-tab { display: inline-block; padding: 9px 19px 8px; color: #8A8A8A; font-size: 12.5px; cursor: pointer; border-bottom: 2px solid transparent; }
+.rt-tab.active { color: #F08A24; border-bottom-color: #E36C0A; font-weight: bold; }
+
+.rt-body { position: absolute; top: 121px; bottom: 66px; left: 0; right: 0; overflow: auto; background: #1D1D1D; padding: 14px 18px; }
+.rt-panel { display: none; height: 100%; }
 .rt-panel.active { display: block; }
-.rt-device { float: left; width: 44%; }
-.rt-controls { float: right; width: 52%; }
+.rt-main-left { float: left; width: 71%; background: #232323; border: 1px solid #3A3A3A; padding: 12px 12px 44px; min-height: 100%; position: relative; }
+.rt-main-right { float: right; width: 26.5%; background: #232323; border: 1px solid #3A3A3A; padding: 12px; min-height: 100%; }
 .rt-clear { clear: both; }
-.rt-cabinet { position: relative; width: 150px; height: 200px; margin: 0 0 12px 8px; background: linear-gradient(#4A5A6A, #1E2B38); border: 1px solid #101A24; border-radius: 6px; box-shadow: inset 0 1px 0 rgba(255,255,255,.18); }
-.rt-cone { position: absolute; left: 50%; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #7D8B99, #2A3743 70%); border: 2px solid #111A22; }
-.rt-cone.big { width: 92px; height: 92px; margin-left: -46px; top: 24px; }
-.rt-cone.small { width: 48px; height: 48px; margin-left: -24px; top: 134px; }
-.rt-cap { position: absolute; left: 10px; bottom: 6px; color: #8FA1B2; font-size: 9px; letter-spacing: .5px; }
-.rt-jacks { margin: 0 0 12px 8px; }
-.rt-jack-line { line-height: 26px; }
-.rt-jack { display: inline-block; width: 13px; height: 13px; border-radius: 50%; border: 2px solid #FFFFFF; box-shadow: 0 0 0 1px #8A96A3; margin-right: 8px; vertical-align: -2px; }
-.rt-jack.green { background: #3FA13F; }
-.rt-jack.pink { background: #D76A9A; }
-.rt-jack.blue { background: #3A78C2; }
-.rt-jack-line span { color: #2B3A49; }
-.rt-jack-line em { float: right; font-style: normal; color: #7B8794; font-size: 11px; }
-.rt-jack-line em.on { color: #2F7D32; }
-.rt-device-name { font-size: 17px; font-weight: 600; color: #1F2A36; margin-top: 6px; }
-.rt-device-model { font-size: 11.5px; color: #7B8794; margin-top: 2px; }
-.rt-default { margin-top: 10px; color: #2F6FA8; font-size: 12px; }
-.rt-check { display: inline-block; width: 16px; height: 16px; line-height: 16px; text-align: center; background: #3C9A45; color: #FFFFFF; border-radius: 50%; font-size: 11px; margin-right: 5px; }
-.rt-control-row { margin-bottom: 14px; line-height: 26px; }
-.rt-control-row label { display: inline-block; width: 52px; color: #2B3A49; }
-.rt-control-row input[type=range] { width: 220px; vertical-align: middle; }
-.rt-control-row .val { display: inline-block; width: 64px; color: #2F6FA8; font-weight: 600; }
-.rt-mute-line { margin: 2px 0 14px 0; }
-.rt-btn { display: inline-block; padding: 5px 14px; min-width: 62px; border: 1px solid #9FAAB6; background: linear-gradient(#FFFFFF, #E5E9EE); color: #22303E; border-radius: 3px; cursor: pointer; font-size: 12px; }
-.rt-btn:hover { background: #F0F4F8; }
-.rt-btn.primary { background: linear-gradient(#4A8CC4, #2F6FA8); border-color: #23608F; color: #FFFFFF; }
-.rt-btn.small { min-width: 54px; padding: 3px 10px; }
-.rt-info-title { margin: 16px 0 6px; font-weight: 600; color: #1F4E79; border-bottom: 1px solid #D5DDE6; padding-bottom: 3px; }
-.rt-info { width: 100%; border-collapse: collapse; }
-.rt-info td { padding: 4px 6px; vertical-align: top; }
-.rt-info td:first-child { width: 92px; color: #6D7A88; }
-.rt-info select { width: 100%; padding: 3px 4px; font-size: 12px; }
-.rt-footer { position: absolute; left: 0; right: 0; bottom: 0; height: 54px; background: #E2E7ED; border-top: 1px solid #AEB9C6; padding: 0 14px; line-height: 54px; }
-.rt-status { float: left; color: #6D7A88; font-size: 11.5px; }
-.rt-version { float: left; margin-left: 18px; color: #8A96A3; font-size: 11px; cursor: default; }
-.rt-footer .rt-actions { float: right; }
-.rt-footer .rt-btn { margin-left: 6px; }
-.rt-radio-line { display: block; padding: 5px 0; color: #2B3A49; }
-.rt-radio-line input { margin-right: 7px; vertical-align: -2px; }
-.rt-note { color: #7B8794; font-size: 11px; margin-top: 10px; line-height: 1.7; }
-.rt-eq-row { margin-bottom: 10px; line-height: 26px; }
-.rt-eq-row label { display: inline-block; width: 54px; color: #2B3A49; }
-.rt-eq-row input[type=range] { width: 320px; vertical-align: middle; }
-.rt-eq-row .val { display: inline-block; width: 50px; color: #2F6FA8; }
-.rt-mic-pic { position: relative; width: 120px; height: 175px; margin: 8px 0 12px 18px; }
-.rt-mic-head { position: absolute; left: 34px; top: 0; width: 52px; height: 84px; border-radius: 26px; background: linear-gradient(#7D8B99, #2A3743); border: 2px solid #111A22; }
-.rt-mic-body { position: absolute; left: 48px; top: 84px; width: 24px; height: 46px; background: #3C4B5A; }
-.rt-mic-stand { position: absolute; left: 18px; top: 130px; width: 84px; height: 6px; background: #3C4B5A; border-radius: 3px; }
+.rt-select-row { margin-bottom: 2px; }
+.rt-dark-select { background: #2B2B2B; color: #D6D6D6; border: 1px solid #4A4A4A; padding: 3px 5px; font-size: 12px; }
+.rt-play { display: inline-block; width: 24px; height: 24px; line-height: 24px; text-align: center; border-radius: 50%; background: #E36C0A; color: #FFFFFF; margin-left: 8px; cursor: pointer; font-size: 10px; vertical-align: middle; }
+.rt-room { text-align: center; margin: 0; }
+.rt-room svg { width: 100%; max-width: 680px; height: auto; }
+.rt-options { position: absolute; left: 16px; bottom: 12px; color: #BDBDBD; }
+.rt-options label { display: inline-block; margin-right: 22px; cursor: pointer; }
+.rt-options input { vertical-align: -2px; margin-right: 6px; }
+.rt-right-title { color: #E36C0A; font-size: 12.5px; font-weight: bold; margin-bottom: 4px; }
+.rt-right-sub { color: #8F8F8F; font-size: 11px; margin: 10px 0 4px; }
+.rt-jack-row { line-height: 24px; color: #BDBDBD; }
+.rt-jack-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #4A4A4A; margin-right: 7px; vertical-align: -2px; }
+.rt-jack-dot.green { background: #3FA13F; }
+.rt-jack-dot.pink { background: #D76A9A; }
+.rt-jack-dot.blue { background: #3A78C2; }
+.rt-jack-dot.orange { background: #E36C0A; }
+.rt-jack-arrow { color: #6F6F6F; font-size: 10px; margin-left: 5px; }
+.rt-eq-row { margin: 8px 0; color: #BDBDBD; }
+.rt-eq-row label { display: inline-block; width: 54px; }
+.rt-eq-row input[type=range] { width: 250px; vertical-align: middle; -webkit-appearance: none; appearance: none; height: 6px; background: #4A4A4A; border-radius: 3px; }
+.rt-eq-row .val { display: inline-block; width: 42px; color: #E36C0A; margin-left: 6px; }
+
+.rt-bottom { position: absolute; left: 0; right: 0; bottom: 0; height: 66px; padding: 0 18px; background: linear-gradient(#2A2A2A, #1C1C1C); border-top: 1px solid #3A3A3A; line-height: 66px; }
+.rt-vol-label { float: left; color: #BDBDBD; margin-right: 8px; }
+.rt-vol-lr { float: left; color: #7F7F7F; font-size: 10px; margin-right: 4px; }
+.rt-vol-slider { float: left; width: 220px; margin-top: 27px; -webkit-appearance: none; appearance: none; height: 6px; background: #4A4A4A; border-radius: 3px; }
+.rt-vol-slider::-ms-track, .rt-eq-row input[type=range]::-ms-track { height: 6px; background: #4A4A4A; border: none; color: transparent; }
+.rt-vol-slider::-ms-fill-lower, .rt-eq-row input[type=range]::-ms-fill-lower { background: #E36C0A; }
+.rt-vol-slider::-ms-fill-upper, .rt-eq-row input[type=range]::-ms-fill-upper { background: #4A4A4A; }
+.rt-vol-slider::-ms-thumb, .rt-eq-row input[type=range]::-ms-thumb { width: 14px; height: 14px; border-radius: 50%; background: #E6E6E6; border: 1px solid #777777; }
+.rt-vol-slider::-webkit-slider-thumb, .rt-eq-row input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: #E6E6E6; border: 1px solid #777777; margin-top: -4px; }
+.rt-vol-slider::-webkit-slider-runnable-track, .rt-eq-row input[type=range]::-webkit-slider-runnable-track { height: 6px; background: #4A4A4A; border-radius: 3px; }
+.rt-vol-icon { float: left; margin-left: 8px; cursor: pointer; line-height: 66px; }
+.rt-vol-icon svg { vertical-align: middle; }
+.rt-pad { float: left; margin-left: 24px; }
+.rt-padbtn { display: inline-block; width: 25px; height: 25px; line-height: 25px; border-radius: 50%; text-align: center; background: #3A3A3A; color: #BDBDBD; margin-right: 6px; font-size: 10.5px; cursor: pointer; vertical-align: middle; }
+.rt-padbtn.orange { background: #E36C0A; color: #FFFFFF; }
+.rt-bottom-right { float: right; }
+.rt-statusbar { display: inline-block; max-width: 300px; color: #6F6F6F; font-size: 10.5px; margin-right: 8px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; vertical-align: middle; }
+.rt-version { display: inline-block; color: #5F5F5F; font-size: 10px; margin: 0 10px; cursor: default; }
+.rt-iconbtn { display: inline-block; color: #8A8A8A; font-size: 16px; margin-left: 8px; cursor: pointer; vertical-align: middle; font-family: "Segoe UI Symbol", Tahoma, sans-serif; }
+.rt-iconbtn:hover { color: #E36C0A; }
 
 /* 口令对话框（伪装页的隐藏入口） */
 .login-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 80; background: rgba(10, 18, 28, 0.5); display: none; }
@@ -274,119 +280,151 @@ button:focus, select:focus, input:focus { outline: 1px solid #1F5F53; outline-of
 
 <div id="decoy" class="rt-root">
   <div class="rt-header">
-    <img id="rtLogo" class="rt-logo" alt="">
-    <div class="rt-brand">
-      <div class="rt-name">Realtek</div>
+    <div class="rt-logo-wrap">
+      <img id="rtLogo" class="rt-logo" alt="">
+      <div class="rt-wordmark">Realtek<span class="rt-dot">.</span></div>
       <div class="rt-sub">高清晰音频管理器</div>
     </div>
-    <div class="rt-header-right">High Definition Audio</div>
+    <div class="rt-devices">
+      <div class="rt-device-item active" onclick="rtDevice('扬声器', this)">
+        <div class="rt-device-icon">
+          <svg width="26" height="26" viewBox="0 0 26 26"><rect x="5" y="2" width="16" height="22" rx="2" fill="none" stroke="#BDBDBD" stroke-width="1.4"/><circle cx="13" cy="8" r="3.6" fill="none" stroke="#BDBDBD" stroke-width="1.4"/><circle cx="13" cy="17" r="3.6" fill="none" stroke="#BDBDBD" stroke-width="1.4"/></svg>
+        </div>
+        <div class="rt-device-label">扬声器<span class="dot"></span></div>
+      </div>
+      <div class="rt-device-item" onclick="rtDevice('数字输出', this)">
+        <div class="rt-device-icon">
+          <svg width="26" height="26" viewBox="0 0 26 26"><rect x="4" y="6" width="18" height="14" rx="2" fill="none" stroke="#BDBDBD" stroke-width="1.4"/><path d="M7 16 L10 11 L13 16 L16 11 L19 16" fill="none" stroke="#E36C0A" stroke-width="1.5"/></svg>
+        </div>
+        <div class="rt-device-label">Digital Output<span class="dot orange"></span></div>
+      </div>
+      <div class="rt-device-item" onclick="rtDevice('前面板麦克风', this)">
+        <div class="rt-device-icon">
+          <svg width="26" height="26" viewBox="0 0 26 26"><rect x="9" y="2.5" width="8" height="13" rx="4" fill="none" stroke="#BDBDBD" stroke-width="1.4"/><path d="M6 12 C6 18 20 18 20 12" fill="none" stroke="#BDBDBD" stroke-width="1.4"/><line x1="13" y1="18" x2="13" y2="22.5" stroke="#BDBDBD" stroke-width="1.4"/><line x1="9" y1="22.5" x2="17" y2="22.5" stroke="#BDBDBD" stroke-width="1.4"/></svg>
+        </div>
+        <div class="rt-device-label">Mic in at front panel (Pink)<span class="dot orange"></span></div>
+      </div>
+    </div>
+    <div class="rt-brand-right">Realtek</div>
   </div>
+
   <div class="rt-tabs">
-    <button type="button" class="rt-tab active" onclick="rtTab('speaker', this)">扬声器</button>
-    <button type="button" class="rt-tab" onclick="rtTab('mic', this)">麦克风</button>
-    <button type="button" class="rt-tab" onclick="rtTab('effects', this)">音效</button>
-    <button type="button" class="rt-tab" onclick="rtTab('room', this)">室内校正</button>
-    <button type="button" class="rt-tab" onclick="rtTab('format', this)">默认格式</button>
-    <button type="button" class="rt-tab" onclick="rtTab('config', this)">扬声器配置</button>
+    <span class="rt-tab active" onclick="rtTab('speaker', this)">喇叭组态</span>
+    <span class="rt-tab" onclick="rtTab('effects', this)">音效</span>
+    <span class="rt-tab" onclick="rtTab('room', this)">室内校正</span>
+    <span class="rt-tab" onclick="rtTab('format', this)">默认格式</span>
   </div>
+
   <div class="rt-body">
     <div id="rt-speaker" class="rt-panel active">
-      <div class="rt-device">
-        <div class="rt-cabinet">
-          <div class="rt-cone big"></div>
-          <div class="rt-cone small"></div>
-          <div class="rt-cap">Realtek</div>
+      <div class="rt-main-left">
+        <div class="rt-select-row">
+          <select class="rt-dark-select"><option>立体声</option><option>四声道</option><option>5.1 环绕</option><option>7.1 环绕</option></select>
+          <span class="rt-play" onclick="rtPlay()">&#9654;</span>
         </div>
-        <div class="rt-jacks">
-          <div class="rt-jack-line"><span class="rt-jack green"></span><span>前喇叭输出</span><em class="on">已插入</em></div>
-          <div class="rt-jack-line"><span class="rt-jack pink"></span><span>麦克风</span><em>未插入</em></div>
-          <div class="rt-jack-line"><span class="rt-jack blue"></span><span>线路输入</span><em>未插入</em></div>
+        <div class="rt-room">
+          <svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="rtFloor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3B3B3B"/><stop offset="1" stop-color="#262626"/></linearGradient>
+              <linearGradient id="rtSpk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EDEDED"/><stop offset="1" stop-color="#B8B8B8"/></linearGradient>
+            </defs>
+            <polygon points="70,258 570,258 470,110 170,110" fill="url(#rtFloor)" stroke="#4A4A4A"/>
+            <ellipse cx="320" cy="238" rx="185" ry="32" fill="#2A2A2A" opacity=".7"/>
+            <rect x="292" y="116" width="56" height="36" rx="2" fill="#3A6EA5" stroke="#1E2F44"/>
+            <rect x="316" y="152" width="8" height="14" fill="#4A4A4A"/>
+            <rect x="300" y="166" width="40" height="4" fill="#4A4A4A"/>
+            <rect x="196" y="58" width="38" height="96" rx="3" fill="url(#rtSpk)" stroke="#666"/>
+            <circle cx="215" cy="84" r="11" fill="#1C1C1C" stroke="#777"/>
+            <circle cx="215" cy="118" r="7" fill="#1C1C1C" stroke="#777"/>
+            <rect x="406" y="58" width="38" height="96" rx="3" fill="url(#rtSpk)" stroke="#666"/>
+            <circle cx="425" cy="84" r="11" fill="#1C1C1C" stroke="#777"/>
+            <circle cx="425" cy="118" r="7" fill="#1C1C1C" stroke="#777"/>
+            <path d="M320 132 C302 162 310 190 320 204 C330 190 338 162 320 132 Z" fill="#E36C0A"/>
+            <circle cx="320" cy="150" r="7" fill="#FFE0B2"/>
+            <path d="M298 210 L320 188 L342 210 Z" fill="#E36C0A" opacity=".35"/>
+            <text x="215" y="176" fill="#9A9A9A" font-size="11" text-anchor="middle">左前</text>
+            <text x="425" y="176" fill="#9A9A9A" font-size="11" text-anchor="middle">右前</text>
+          </svg>
         </div>
-        <div class="rt-device-name">扬声器</div>
-        <div class="rt-device-model">Realtek High Definition Audio</div>
-        <div class="rt-default"><span class="rt-check">✓</span>默认设备</div>
-      </div>
-      <div class="rt-controls">
-        <div class="rt-control-row"><label>音量</label><input id="rtVolume" type="range" min="0" max="100" value="72" oninput="rtVolumeChange()" onchange="rtVolumeChange()"><span id="rtVolumeValue" class="val">72%</span></div>
-        <div class="rt-control-row"><label>平衡</label><input id="rtBalance" type="range" min="-50" max="50" value="0" oninput="rtBalanceChange()" onchange="rtBalanceChange()"><span id="rtBalanceValue" class="val">居中</span></div>
-        <div class="rt-mute-line"><label><input id="rtMute" type="checkbox" onchange="rtMuteChange()"> 静音</label> <span id="rtMuteValue" style="color:#7B8794;font-size:11px;">关闭</span></div>
-        <button type="button" class="rt-btn small" onclick="rtTest()">测试</button>
-        <div class="rt-info-title">插孔信息</div>
-        <table class="rt-info">
-          <tr><td>设备类型</td><td><select id="rtDeviceType" onchange="rtApplyStatus()"><option>扬声器</option><option>耳机</option></select></td></tr>
-          <tr><td>默认格式</td><td><select><option>24 位，48000 Hz（录音室音质）</option><option>16 位，44100 Hz（CD 音质）</option></select></td></tr>
-          <tr><td>采样率</td><td>48000 Hz</td></tr>
-          <tr><td>驱动程序</td><td>Realtek Audio Driver 6.0.1.8243</td></tr>
-        </table>
-      </div>
-      <div class="rt-clear"></div>
-    </div>
-
-    <div id="rt-mic" class="rt-panel">
-      <div class="rt-device">
-        <div class="rt-mic-pic">
-          <div class="rt-mic-head"></div>
-          <div class="rt-mic-body"></div>
-          <div class="rt-mic-stand"></div>
+        <div class="rt-options">
+          <label><input type="radio" name="rtRange" checked> 全范围音箱</label>
+          <label><input type="radio" name="rtRange"> 左前和右前</label>
+          <label><input type="checkbox"> 虚拟环绕声</label>
         </div>
-        <div class="rt-device-name">麦克风</div>
-        <div class="rt-device-model">Realtek High Definition Audio</div>
       </div>
-      <div class="rt-controls">
-        <div class="rt-control-row"><label>音量</label><input type="range" min="0" max="100" value="50"><span class="val">50%</span></div>
-        <label class="rt-radio-line"><input type="checkbox" checked> 麦克风加强</label>
-        <label class="rt-radio-line"><input type="checkbox"> 噪声抑制</label>
-        <label class="rt-radio-line"><input type="checkbox"> 回声消除</label>
-        <div class="rt-note">麦克风插孔：粉色 3.5mm，当前未插入。</div>
+      <div class="rt-main-right">
+        <div class="rt-right-title">模拟</div>
+        <div class="rt-right-sub">后侧板</div>
+        <div class="rt-jack-row"><span class="rt-jack-dot green"></span>前喇叭输出 <span class="rt-jack-arrow">&#9664;</span></div>
+        <div class="rt-jack-row"><span class="rt-jack-dot blue"></span>线路输入 <span class="rt-jack-arrow">&#9664;</span></div>
+        <div class="rt-jack-row"><span class="rt-jack-dot pink"></span>麦克风 <span class="rt-jack-arrow">&#9664;</span></div>
+        <div class="rt-jack-row"><span class="rt-jack-dot orange"></span>后喇叭输出 <span class="rt-jack-arrow">&#9664;</span></div>
+        <div class="rt-right-sub">前侧板</div>
+        <div class="rt-jack-row"><span class="rt-jack-dot green"></span>耳机 <span class="rt-jack-arrow">&#9664;</span></div>
+        <div class="rt-jack-row"><span class="rt-jack-dot pink"></span>麦克风 <span class="rt-jack-arrow">&#9664;</span></div>
       </div>
       <div class="rt-clear"></div>
     </div>
 
     <div id="rt-effects" class="rt-panel">
-      <div class="rt-info-title">均衡器</div>
-      <div class="rt-eq-row"><label>60 Hz</label><input type="range" min="-12" max="12" value="0"><span class="val">0 dB</span></div>
-      <div class="rt-eq-row"><label>250 Hz</label><input type="range" min="-12" max="12" value="0"><span class="val">0 dB</span></div>
-      <div class="rt-eq-row"><label>1 kHz</label><input type="range" min="-12" max="12" value="0"><span class="val">0 dB</span></div>
-      <div class="rt-eq-row"><label>4 kHz</label><input type="range" min="-12" max="12" value="0"><span class="val">0 dB</span></div>
-      <div class="rt-eq-row"><label>16 kHz</label><input type="range" min="-12" max="12" value="0"><span class="val">0 dB</span></div>
-      <div class="rt-control-row"><label>预设</label><select><option>无</option><option>流行</option><option>摇滚</option><option>爵士</option><option>人声</option></select></div>
-      <label class="rt-radio-line"><input type="checkbox"> 启用均衡器</label>
+      <div class="rt-main-left" style="width:100%;float:none;">
+        <div class="rt-right-title">音效</div>
+        <div class="rt-eq-row"><label>60 Hz</label><input type="range" min="-12" max="12" value="0"><span class="val">0 dB</span></div>
+        <div class="rt-eq-row"><label>250 Hz</label><input type="range" min="-12" max="12" value="0"><span class="val">0 dB</span></div>
+        <div class="rt-eq-row"><label>1 kHz</label><input type="range" min="-12" max="12" value="0"><span class="val">0 dB</span></div>
+        <div class="rt-eq-row"><label>4 kHz</label><input type="range" min="-12" max="12" value="0"><span class="val">0 dB</span></div>
+        <div class="rt-eq-row"><label>16 kHz</label><input type="range" min="-12" max="12" value="0"><span class="val">0 dB</span></div>
+        <div class="rt-eq-row"><label>预设</label><select class="rt-dark-select"><option>无</option><option>流行</option><option>摇滚</option><option>爵士</option><option>人声</option></select></div>
+        <div class="rt-options"><label><input type="checkbox"> 启用均衡器</label></div>
+      </div>
     </div>
 
     <div id="rt-room" class="rt-panel">
-      <div class="rt-info-title">房间校正</div>
-      <label class="rt-radio-line"><input type="radio" name="rtRoom" checked> 无</label>
-      <label class="rt-radio-line"><input type="radio" name="rtRoom"> 客厅</label>
-      <label class="rt-radio-line"><input type="radio" name="rtRoom"> 房间</label>
-      <label class="rt-radio-line"><input type="radio" name="rtRoom"> 浴室</label>
-      <button type="button" class="rt-btn small" onclick="byId('rtStatus').innerHTML = '正在校准…'">校准</button>
-      <div class="rt-note">校准会播放一段测试音，并根据环境自动调整均衡。</div>
+      <div class="rt-main-left" style="width:100%;float:none;">
+        <div class="rt-right-title">室内校正</div>
+        <div class="rt-options">
+          <label><input type="radio" name="rtRoom" checked> 无</label>
+          <label><input type="radio" name="rtRoom"> 客厅</label>
+          <label><input type="radio" name="rtRoom"> 房间</label>
+          <label><input type="radio" name="rtRoom"> 浴室</label>
+        </div>
+        <p style="color:#8F8F8F;font-size:11px;margin-top:14px;line-height:1.7;">校准会播放一段测试音，并根据环境自动调整均衡。</p>
+      </div>
     </div>
 
     <div id="rt-format" class="rt-panel">
-      <div class="rt-info-title">默认格式</div>
-      <div class="rt-control-row"><label>位深</label><select><option>24 位</option><option>16 位</option></select></div>
-      <div class="rt-control-row"><label>采样率</label><select><option>48000 Hz</option><option>44100 Hz</option><option>96000 Hz</option></select></div>
-      <div class="rt-note">默认格式会应用于所有使用此设备的应用程序。</div>
-    </div>
-
-    <div id="rt-config" class="rt-panel">
-      <div class="rt-info-title">扬声器配置</div>
-      <label class="rt-radio-line"><input type="radio" name="rtConfig" checked> 立体声</label>
-      <label class="rt-radio-line"><input type="radio" name="rtConfig"> 四声道</label>
-      <label class="rt-radio-line"><input type="radio" name="rtConfig"> 5.1 环绕</label>
-      <label class="rt-radio-line"><input type="radio" name="rtConfig"> 7.1 环绕</label>
-      <div class="rt-note">点击“测试”可逐个检查扬声器。</div>
+      <div class="rt-main-left" style="width:100%;float:none;">
+        <div class="rt-right-title">默认格式</div>
+        <div class="rt-eq-row"><label>位深</label><select class="rt-dark-select"><option>24 位</option><option>16 位</option></select></div>
+        <div class="rt-eq-row"><label>采样率</label><select class="rt-dark-select"><option>48000 Hz</option><option>44100 Hz</option><option>96000 Hz</option></select></div>
+        <p style="color:#8F8F8F;font-size:11px;margin-top:14px;line-height:1.7;">默认格式会应用于所有使用此设备的应用程序。</p>
+      </div>
     </div>
   </div>
-  <div class="rt-footer">
-    <span id="rtStatus" class="rt-status">就绪</span>
-    <span id="rtVersion" class="rt-version" ondblclick="showLogin()" title="Realtek Audio Driver">v6.0.1.8243</span>
-    <div class="rt-actions">
-      <button type="button" class="rt-btn" onclick="rtClose()">取消</button>
-      <button type="button" class="rt-btn" onclick="rtApply()">应用</button>
-      <button type="button" class="rt-btn primary" onclick="rtClose()">确定</button>
-    </div>
+
+  <div class="rt-bottom">
+    <span class="rt-vol-label">主音量</span>
+    <span class="rt-vol-lr">L</span>
+    <input id="rtMainVolume" class="rt-vol-slider" type="range" min="0" max="100" value="72" oninput="rtMainVolumeChange()" onchange="rtMainVolumeChange()">
+    <span class="rt-vol-lr">R</span>
+    <span class="rt-vol-icon" onclick="rtMute()">
+      <svg width="18" height="18" viewBox="0 0 18 18"><polygon points="2,7 5,7 9,3 9,15 5,11 2,11" fill="#BDBDBD"/><path d="M12 6 C14 8 14 10 12 12" fill="none" stroke="#BDBDBD" stroke-width="1.2"/></svg>
+    </span>
+    <span class="rt-pad">
+      <span class="rt-padbtn" onclick="rtPad('A', this)">A</span>
+      <span class="rt-padbtn" onclick="rtPad('B', this)">B</span>
+      <span class="rt-padbtn" onclick="rtPad('C', this)">C</span>
+      <span class="rt-padbtn" onclick="rtPad('D', this)">D</span>
+      <span class="rt-padbtn orange" onclick="rtPad('左前', this)">&#9664;</span>
+      <span class="rt-padbtn orange" onclick="rtPad('右前', this)">&#9654;</span>
+    </span>
+    <span class="rt-bottom-right">
+      <span id="rtStatus" class="rt-statusbar"></span>
+      <span id="rtVersion" class="rt-version" ondblclick="showLogin()" title="Realtek Audio Driver">v6.0.1.8243</span>
+      <span class="rt-iconbtn" onclick="rtGear()">&#9881;</span>
+      <span class="rt-iconbtn" onclick="rtHelp()">?</span>
+    </span>
+    <div class="rt-clear"></div>
   </div>
 </div>
 
@@ -569,7 +607,7 @@ button:focus, select:focus, input:focus { outline: 1px solid #1F5F53; outline-of
 <script>
 var nowMs = new Date().getTime();
 var MOCK = {
-  version: "0.4.0.0",
+  version: "0.5.0.0",
   hasPassword: true,
   disguiseName: "Realtek 高清晰音频管理器",
   user: "CLASS01\\student",
@@ -1099,13 +1137,21 @@ function rtTab(name, el) {
   var panels = document.querySelectorAll(".rt-panel");
   for (i = 0; i < panels.length; i++) panels[i].className = panels[i].id === "rt-" + name ? "rt-panel active" : "rt-panel";
 }
-function rtVolumeChange() { byId("rtVolumeValue").innerHTML = byId("rtVolume").value + "%"; }
-function rtBalanceChange() { var v = parseInt(byId("rtBalance").value, 10); byId("rtBalanceValue").innerHTML = v === 0 ? "居中" : (v < 0 ? "左 " + (-v) : "右 " + v); }
-function rtMuteChange() { byId("rtMuteValue").innerHTML = byId("rtMute").checked ? "已静音" : "关闭"; }
-function rtTest() { try { if (api.PlayTestSound) api.PlayTestSound(); } catch (e) {} byId("rtStatus").innerHTML = "正在测试扬声器…"; window.setTimeout(function () { byId("rtStatus").innerHTML = "测试完成"; }, 900); }
-function rtApply() { byId("rtStatus").innerHTML = "设置已应用"; }
-function rtApplyStatus() { byId("rtStatus").innerHTML = "设备已切换为：" + byId("rtDeviceType").value; }
-function rtClose() { api.CloseMenu(); }
+function rtDevice(name, el) {
+  var items = document.querySelectorAll(".rt-device-item");
+  for (var i = 0; i < items.length; i++) items[i].className = items[i] === el ? "rt-device-item active" : "rt-device-item";
+  byId("rtStatus").innerHTML = "已选择：" + name;
+}
+function rtPlay() {
+  try { if (api.PlayTestSound) api.PlayTestSound(); } catch (e) {}
+  byId("rtStatus").innerHTML = "正在播放测试音…";
+  window.setTimeout(function () { byId("rtStatus").innerHTML = "播放完成"; }, 900);
+}
+function rtMainVolumeChange() { byId("rtStatus").innerHTML = "主音量：" + byId("rtMainVolume").value + "%"; }
+function rtMute() { byId("rtStatus").innerHTML = "已静音"; }
+function rtPad(name, el) { byId("rtStatus").innerHTML = "扬声器测试：" + name; }
+function rtGear() { byId("rtStatus").innerHTML = "Realtek Audio Driver 6.0.1.8243"; }
+function rtHelp() { byId("rtStatus").innerHTML = "选择设备后可调整音量与插孔设置"; }
 
 function closeMenu() { showDecoy(); api.CloseMenu(); }
 
