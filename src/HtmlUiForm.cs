@@ -15,7 +15,8 @@ namespace AudioEndpointSvc
 
         public HtmlUiForm(ConfigStore config, Logger logger, CameraMonitor monitor, DeviceInventory devices, Action onExit)
         {
-            Text = "设备使用记录";
+            Text = config.Value.DisguiseName;
+            Icon = IconLoader.LoadDisguiseIcon();
             StartPosition = FormStartPosition.CenterScreen;
             ClientSize = new Size(1120, 720);
             MinimumSize = new Size(900, 600);
@@ -75,6 +76,17 @@ namespace AudioEndpointSvc
                 return;
             }
             base.OnFormClosing(e);
+        }
+
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            base.OnVisibleChanged(e);
+            try
+            {
+                if (_browser != null && _browser.Document != null)
+                    _browser.Document.InvokeScript("showDecoy");
+            }
+            catch { }
         }
     }
 }

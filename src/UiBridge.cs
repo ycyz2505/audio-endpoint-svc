@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
@@ -144,6 +146,22 @@ namespace AudioEndpointSvc
             return Json.ToLine(live);
         }
 
+        // 伪装页的 Realtek 图标（数据 URL），与任务栏/托盘图标一致。
+        public string GetBrandIcon()
+        {
+            try
+            {
+                using (Icon icon = IconLoader.LoadDisguiseIcon())
+                using (Bitmap bitmap = icon.ToBitmap())
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    bitmap.Save(stream, ImageFormat.Png);
+                    return "data:image/png;base64," + Convert.ToBase64String(stream.ToArray());
+                }
+            }
+            catch { return ""; }
+        }
+
         public string SaveSettings(string json)
         {
             UiConfig cfg;
@@ -281,6 +299,12 @@ namespace AudioEndpointSvc
         public void OpenLogFolder()
         {
             try { Process.Start(_logger.LogDirectory); }
+            catch { }
+        }
+
+        public void PlayTestSound()
+        {
+            try { System.Media.SystemSounds.Beep.Play(); }
             catch { }
         }
 

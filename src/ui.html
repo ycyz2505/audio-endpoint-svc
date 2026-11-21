@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta charset="utf-8">
-<title>设备使用记录</title>
+<title>Realtek 高清晰音频管理器</title>
 <style>
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
@@ -189,23 +189,219 @@ button:focus, select:focus, input:focus { outline: 1px solid #1F5F53; outline-of
   .live-dot { animation: none; -webkit-animation: none; }
   .drawer { transition: none; }
 }
+
+/* ===== 仿真 Realtek 高清晰音频管理器（伪装页） ===== */
+.rt-root { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 10; background: #EDF1F5; color: #1F2A36; font-family: "Microsoft YaHei UI", "Microsoft YaHei", "Segoe UI", sans-serif; font-size: 12.5px; }
+.rt-header { height: 60px; padding: 0 16px; background: linear-gradient(#2F6FA8, #1F4E79); color: #FFFFFF; overflow: hidden; }
+.rt-logo { float: left; width: 30px; height: 30px; margin: 15px 10px 0 0; display: none; }
+.rt-brand { float: left; margin-top: 10px; }
+.rt-name { font-size: 19px; font-weight: 600; letter-spacing: .3px; line-height: 1.2; }
+.rt-sub { font-size: 12px; color: #D6E4F2; margin-top: 1px; }
+.rt-header-right { float: right; margin-top: 22px; font-size: 11px; color: #C6D8EA; letter-spacing: .4px; }
+.rt-tabs { height: 38px; padding: 8px 12px 0; background: #DEE4EB; border-bottom: 1px solid #A9B5C2; }
+.rt-tab { display: inline-block; padding: 6px 15px; margin-right: 3px; background: #D2DAE4; border: 1px solid #A9B5C2; border-bottom: none; color: #2C3A49; font-size: 12.5px; cursor: pointer; border-radius: 3px 3px 0 0; }
+.rt-tab.active { background: #F7F9FB; border-top: 2px solid #2F6FA8; color: #1F4E79; font-weight: 600; padding-top: 5px; }
+.rt-body { position: absolute; top: 98px; bottom: 54px; left: 0; right: 0; overflow: auto; padding: 14px; background: #EDF1F5; }
+.rt-panel { display: none; background: #FFFFFF; border: 1px solid #C4CFDB; padding: 18px; min-height: 100%; }
+.rt-panel.active { display: block; }
+.rt-device { float: left; width: 44%; }
+.rt-controls { float: right; width: 52%; }
+.rt-clear { clear: both; }
+.rt-cabinet { position: relative; width: 150px; height: 200px; margin: 0 0 12px 8px; background: linear-gradient(#4A5A6A, #1E2B38); border: 1px solid #101A24; border-radius: 6px; box-shadow: inset 0 1px 0 rgba(255,255,255,.18); }
+.rt-cone { position: absolute; left: 50%; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #7D8B99, #2A3743 70%); border: 2px solid #111A22; }
+.rt-cone.big { width: 92px; height: 92px; margin-left: -46px; top: 24px; }
+.rt-cone.small { width: 48px; height: 48px; margin-left: -24px; top: 134px; }
+.rt-cap { position: absolute; left: 10px; bottom: 6px; color: #8FA1B2; font-size: 9px; letter-spacing: .5px; }
+.rt-jacks { margin: 0 0 12px 8px; }
+.rt-jack-line { line-height: 26px; }
+.rt-jack { display: inline-block; width: 13px; height: 13px; border-radius: 50%; border: 2px solid #FFFFFF; box-shadow: 0 0 0 1px #8A96A3; margin-right: 8px; vertical-align: -2px; }
+.rt-jack.green { background: #3FA13F; }
+.rt-jack.pink { background: #D76A9A; }
+.rt-jack.blue { background: #3A78C2; }
+.rt-jack-line span { color: #2B3A49; }
+.rt-jack-line em { float: right; font-style: normal; color: #7B8794; font-size: 11px; }
+.rt-jack-line em.on { color: #2F7D32; }
+.rt-device-name { font-size: 17px; font-weight: 600; color: #1F2A36; margin-top: 6px; }
+.rt-device-model { font-size: 11.5px; color: #7B8794; margin-top: 2px; }
+.rt-default { margin-top: 10px; color: #2F6FA8; font-size: 12px; }
+.rt-check { display: inline-block; width: 16px; height: 16px; line-height: 16px; text-align: center; background: #3C9A45; color: #FFFFFF; border-radius: 50%; font-size: 11px; margin-right: 5px; }
+.rt-control-row { margin-bottom: 14px; line-height: 26px; }
+.rt-control-row label { display: inline-block; width: 52px; color: #2B3A49; }
+.rt-control-row input[type=range] { width: 220px; vertical-align: middle; }
+.rt-control-row .val { display: inline-block; width: 64px; color: #2F6FA8; font-weight: 600; }
+.rt-mute-line { margin: 2px 0 14px 0; }
+.rt-btn { display: inline-block; padding: 5px 14px; min-width: 62px; border: 1px solid #9FAAB6; background: linear-gradient(#FFFFFF, #E5E9EE); color: #22303E; border-radius: 3px; cursor: pointer; font-size: 12px; }
+.rt-btn:hover { background: #F0F4F8; }
+.rt-btn.primary { background: linear-gradient(#4A8CC4, #2F6FA8); border-color: #23608F; color: #FFFFFF; }
+.rt-btn.small { min-width: 54px; padding: 3px 10px; }
+.rt-info-title { margin: 16px 0 6px; font-weight: 600; color: #1F4E79; border-bottom: 1px solid #D5DDE6; padding-bottom: 3px; }
+.rt-info { width: 100%; border-collapse: collapse; }
+.rt-info td { padding: 4px 6px; vertical-align: top; }
+.rt-info td:first-child { width: 92px; color: #6D7A88; }
+.rt-info select { width: 100%; padding: 3px 4px; font-size: 12px; }
+.rt-footer { position: absolute; left: 0; right: 0; bottom: 0; height: 54px; background: #E2E7ED; border-top: 1px solid #AEB9C6; padding: 0 14px; line-height: 54px; }
+.rt-status { float: left; color: #6D7A88; font-size: 11.5px; }
+.rt-version { float: left; margin-left: 18px; color: #8A96A3; font-size: 11px; cursor: default; }
+.rt-footer .rt-actions { float: right; }
+.rt-footer .rt-btn { margin-left: 6px; }
+.rt-radio-line { display: block; padding: 5px 0; color: #2B3A49; }
+.rt-radio-line input { margin-right: 7px; vertical-align: -2px; }
+.rt-note { color: #7B8794; font-size: 11px; margin-top: 10px; line-height: 1.7; }
+.rt-eq-row { margin-bottom: 10px; line-height: 26px; }
+.rt-eq-row label { display: inline-block; width: 54px; color: #2B3A49; }
+.rt-eq-row input[type=range] { width: 320px; vertical-align: middle; }
+.rt-eq-row .val { display: inline-block; width: 50px; color: #2F6FA8; }
+.rt-mic-pic { position: relative; width: 120px; height: 175px; margin: 8px 0 12px 18px; }
+.rt-mic-head { position: absolute; left: 34px; top: 0; width: 52px; height: 84px; border-radius: 26px; background: linear-gradient(#7D8B99, #2A3743); border: 2px solid #111A22; }
+.rt-mic-body { position: absolute; left: 48px; top: 84px; width: 24px; height: 46px; background: #3C4B5A; }
+.rt-mic-stand { position: absolute; left: 18px; top: 130px; width: 84px; height: 6px; background: #3C4B5A; border-radius: 3px; }
+
+/* 口令对话框（伪装页的隐藏入口） */
+.login-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 80; background: rgba(10, 18, 28, 0.5); display: none; }
+.login-overlay.show { display: block; }
+.login-dialog { position: absolute; top: 50%; left: 50%; width: 380px; margin-left: -190px; margin-top: -120px; background: #F4F6F9; border: 1px solid #7D8B9A; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35); }
+.login-title { height: 34px; line-height: 34px; padding: 0 12px; background: linear-gradient(#2F6FA8, #1F4E79); color: #FFFFFF; font-size: 13px; font-weight: 600; }
+.login-body { padding: 18px 18px 14px; }
+.login-sub { font-size: 13px; color: #1F2A36; margin-bottom: 14px; }
+.login-input { width: 100%; padding: 7px 8px; border: 1px solid #A9B5C2; font-size: 13px; margin-bottom: 10px; background: #FFFFFF; color: #1F2A36; }
+.login-input:focus { outline: 1px solid #2F6FA8; outline-offset: 0; }
+.login-error { color: #B42318; font-size: 12px; min-height: 18px; margin-bottom: 8px; }
+.login-actions { text-align: right; }
+.login-actions .rt-btn { margin-left: 8px; }
 </style>
 </head>
 <body>
 
-<div id="login" class="login-screen">
-  <div class="login-left">
-    <span class="mark"><i></i><i></i><i></i></span>
-    <div class="login-brand">设备使用记录</div>
-    <div class="login-tagline">本地设备使用日志<br>数据只保存在这台电脑</div>
+<div id="decoy" class="rt-root">
+  <div class="rt-header">
+    <img id="rtLogo" class="rt-logo" alt="">
+    <div class="rt-brand">
+      <div class="rt-name">Realtek</div>
+      <div class="rt-sub">高清晰音频管理器</div>
+    </div>
+    <div class="rt-header-right">High Definition Audio</div>
   </div>
-  <div class="login-right">
-    <div class="login-form">
-      <div id="loginSub" class="form-title">请输入管理口令</div>
-      <input id="pwd" class="field" type="password" placeholder="口令">
-      <input id="pwd2" class="field hidden" type="password" placeholder="再次输入口令">
-      <div id="loginError" class="error"></div>
-      <button id="loginBtn" class="btn" onclick="doLogin()">进入</button>
+  <div class="rt-tabs">
+    <button type="button" class="rt-tab active" onclick="rtTab('speaker', this)">扬声器</button>
+    <button type="button" class="rt-tab" onclick="rtTab('mic', this)">麦克风</button>
+    <button type="button" class="rt-tab" onclick="rtTab('effects', this)">音效</button>
+    <button type="button" class="rt-tab" onclick="rtTab('room', this)">室内校正</button>
+    <button type="button" class="rt-tab" onclick="rtTab('format', this)">默认格式</button>
+    <button type="button" class="rt-tab" onclick="rtTab('config', this)">扬声器配置</button>
+  </div>
+  <div class="rt-body">
+    <div id="rt-speaker" class="rt-panel active">
+      <div class="rt-device">
+        <div class="rt-cabinet">
+          <div class="rt-cone big"></div>
+          <div class="rt-cone small"></div>
+          <div class="rt-cap">Realtek</div>
+        </div>
+        <div class="rt-jacks">
+          <div class="rt-jack-line"><span class="rt-jack green"></span><span>前喇叭输出</span><em class="on">已插入</em></div>
+          <div class="rt-jack-line"><span class="rt-jack pink"></span><span>麦克风</span><em>未插入</em></div>
+          <div class="rt-jack-line"><span class="rt-jack blue"></span><span>线路输入</span><em>未插入</em></div>
+        </div>
+        <div class="rt-device-name">扬声器</div>
+        <div class="rt-device-model">Realtek High Definition Audio</div>
+        <div class="rt-default"><span class="rt-check">✓</span>默认设备</div>
+      </div>
+      <div class="rt-controls">
+        <div class="rt-control-row"><label>音量</label><input id="rtVolume" type="range" min="0" max="100" value="72" oninput="rtVolumeChange()" onchange="rtVolumeChange()"><span id="rtVolumeValue" class="val">72%</span></div>
+        <div class="rt-control-row"><label>平衡</label><input id="rtBalance" type="range" min="-50" max="50" value="0" oninput="rtBalanceChange()" onchange="rtBalanceChange()"><span id="rtBalanceValue" class="val">居中</span></div>
+        <div class="rt-mute-line"><label><input id="rtMute" type="checkbox" onchange="rtMuteChange()"> 静音</label> <span id="rtMuteValue" style="color:#7B8794;font-size:11px;">关闭</span></div>
+        <button type="button" class="rt-btn small" onclick="rtTest()">测试</button>
+        <div class="rt-info-title">插孔信息</div>
+        <table class="rt-info">
+          <tr><td>设备类型</td><td><select id="rtDeviceType" onchange="rtApplyStatus()"><option>扬声器</option><option>耳机</option></select></td></tr>
+          <tr><td>默认格式</td><td><select><option>24 位，48000 Hz（录音室音质）</option><option>16 位，44100 Hz（CD 音质）</option></select></td></tr>
+          <tr><td>采样率</td><td>48000 Hz</td></tr>
+          <tr><td>驱动程序</td><td>Realtek Audio Driver 6.0.1.8243</td></tr>
+        </table>
+      </div>
+      <div class="rt-clear"></div>
+    </div>
+
+    <div id="rt-mic" class="rt-panel">
+      <div class="rt-device">
+        <div class="rt-mic-pic">
+          <div class="rt-mic-head"></div>
+          <div class="rt-mic-body"></div>
+          <div class="rt-mic-stand"></div>
+        </div>
+        <div class="rt-device-name">麦克风</div>
+        <div class="rt-device-model">Realtek High Definition Audio</div>
+      </div>
+      <div class="rt-controls">
+        <div class="rt-control-row"><label>音量</label><input type="range" min="0" max="100" value="50"><span class="val">50%</span></div>
+        <label class="rt-radio-line"><input type="checkbox" checked> 麦克风加强</label>
+        <label class="rt-radio-line"><input type="checkbox"> 噪声抑制</label>
+        <label class="rt-radio-line"><input type="checkbox"> 回声消除</label>
+        <div class="rt-note">麦克风插孔：粉色 3.5mm，当前未插入。</div>
+      </div>
+      <div class="rt-clear"></div>
+    </div>
+
+    <div id="rt-effects" class="rt-panel">
+      <div class="rt-info-title">均衡器</div>
+      <div class="rt-eq-row"><label>60 Hz</label><input type="range" min="-12" max="12" value="0"><span class="val">0 dB</span></div>
+      <div class="rt-eq-row"><label>250 Hz</label><input type="range" min="-12" max="12" value="0"><span class="val">0 dB</span></div>
+      <div class="rt-eq-row"><label>1 kHz</label><input type="range" min="-12" max="12" value="0"><span class="val">0 dB</span></div>
+      <div class="rt-eq-row"><label>4 kHz</label><input type="range" min="-12" max="12" value="0"><span class="val">0 dB</span></div>
+      <div class="rt-eq-row"><label>16 kHz</label><input type="range" min="-12" max="12" value="0"><span class="val">0 dB</span></div>
+      <div class="rt-control-row"><label>预设</label><select><option>无</option><option>流行</option><option>摇滚</option><option>爵士</option><option>人声</option></select></div>
+      <label class="rt-radio-line"><input type="checkbox"> 启用均衡器</label>
+    </div>
+
+    <div id="rt-room" class="rt-panel">
+      <div class="rt-info-title">房间校正</div>
+      <label class="rt-radio-line"><input type="radio" name="rtRoom" checked> 无</label>
+      <label class="rt-radio-line"><input type="radio" name="rtRoom"> 客厅</label>
+      <label class="rt-radio-line"><input type="radio" name="rtRoom"> 房间</label>
+      <label class="rt-radio-line"><input type="radio" name="rtRoom"> 浴室</label>
+      <button type="button" class="rt-btn small" onclick="byId('rtStatus').innerHTML = '正在校准…'">校准</button>
+      <div class="rt-note">校准会播放一段测试音，并根据环境自动调整均衡。</div>
+    </div>
+
+    <div id="rt-format" class="rt-panel">
+      <div class="rt-info-title">默认格式</div>
+      <div class="rt-control-row"><label>位深</label><select><option>24 位</option><option>16 位</option></select></div>
+      <div class="rt-control-row"><label>采样率</label><select><option>48000 Hz</option><option>44100 Hz</option><option>96000 Hz</option></select></div>
+      <div class="rt-note">默认格式会应用于所有使用此设备的应用程序。</div>
+    </div>
+
+    <div id="rt-config" class="rt-panel">
+      <div class="rt-info-title">扬声器配置</div>
+      <label class="rt-radio-line"><input type="radio" name="rtConfig" checked> 立体声</label>
+      <label class="rt-radio-line"><input type="radio" name="rtConfig"> 四声道</label>
+      <label class="rt-radio-line"><input type="radio" name="rtConfig"> 5.1 环绕</label>
+      <label class="rt-radio-line"><input type="radio" name="rtConfig"> 7.1 环绕</label>
+      <div class="rt-note">点击“测试”可逐个检查扬声器。</div>
+    </div>
+  </div>
+  <div class="rt-footer">
+    <span id="rtStatus" class="rt-status">就绪</span>
+    <span id="rtVersion" class="rt-version" ondblclick="showLogin()" title="Realtek Audio Driver">v6.0.1.8243</span>
+    <div class="rt-actions">
+      <button type="button" class="rt-btn" onclick="rtClose()">取消</button>
+      <button type="button" class="rt-btn" onclick="rtApply()">应用</button>
+      <button type="button" class="rt-btn primary" onclick="rtClose()">确定</button>
+    </div>
+  </div>
+</div>
+
+<div id="login" class="login-overlay">
+  <div class="login-dialog">
+    <div class="login-title">Realtek 高清晰音频管理器</div>
+    <div class="login-body">
+      <div id="loginSub" class="login-sub">请输入管理口令</div>
+      <input id="pwd" class="login-input" type="password" placeholder="口令">
+      <input id="pwd2" class="login-input hidden" type="password" placeholder="再次输入口令">
+      <div id="loginError" class="login-error"></div>
+      <div class="login-actions">
+        <button type="button" class="rt-btn" onclick="hideLogin()">取消</button>
+        <button id="loginBtn" type="button" class="rt-btn primary" onclick="doLogin()">确定</button>
+      </div>
     </div>
   </div>
 </div>
@@ -373,7 +569,7 @@ button:focus, select:focus, input:focus { outline: 1px solid #1F5F53; outline-of
 <script>
 var nowMs = new Date().getTime();
 var MOCK = {
-  version: "0.3.2.0",
+  version: "0.4.0.0",
   hasPassword: true,
   disguiseName: "Realtek 高清晰音频管理器",
   user: "CLASS01\\student",
@@ -390,6 +586,8 @@ var MOCK = {
 var MOCK_API = {
   GetBootstrap: function () { return JSON.stringify(MOCK); },
   GetDataVersion: function () { return "mock"; },
+  GetBrandIcon: function () { return ""; },
+  PlayTestSound: function () {},
   GetLive: function () {
     return JSON.stringify({ active: [{ app: "微信", identity: "WeChat.exe", device: "Integrated Camera", seconds: 83 }] });
   },
@@ -415,6 +613,7 @@ var programList = [];
 var hasPassword = true;
 var liveTimer = null;
 var dataTimer = null;
+var idleTimer = null;
 var lastDataVersion = null;
 var currentRange = "today";
 var confirmAction = null;
@@ -480,12 +679,40 @@ function doLogin() {
 }
 
 function enterApp() {
-  byId("login").style.display = "none";
+  byId("decoy").style.display = "none";
+  byId("login").className = "login-overlay";
   byId("app").className = "";
   reloadData();
   updateLive();
   if (!liveTimer) liveTimer = setInterval(updateLive, 1000);
   if (!dataTimer) dataTimer = setInterval(refreshData, 3000);
+  resetIdle();
+}
+
+function appVisible() { return byId("app").className.indexOf("hidden") < 0; }
+
+function showDecoy() {
+  byId("decoy").style.display = "block";
+  byId("app").className = "hidden";
+  byId("login").className = "login-overlay";
+  if (liveTimer) { clearInterval(liveTimer); liveTimer = null; }
+  if (dataTimer) { clearInterval(dataTimer); dataTimer = null; }
+  if (idleTimer) { clearTimeout(idleTimer); idleTimer = null; }
+}
+
+function showLogin() {
+  byId("login").className = "login-overlay show";
+  byId("loginError").innerHTML = "";
+  byId("pwd").value = "";
+  if (byId("pwd2")) byId("pwd2").value = "";
+  window.setTimeout(function () { byId("pwd").focus(); }, 50);
+}
+
+function hideLogin() { byId("login").className = "login-overlay"; }
+
+function resetIdle() {
+  if (idleTimer) clearTimeout(idleTimer);
+  idleTimer = window.setTimeout(function () { if (appVisible()) showDecoy(); }, 300000);
 }
 
 function reloadData() {
@@ -866,12 +1093,26 @@ function showConfirm(text, action) {
 
 function closeConfirm() { byId("confirm").className = "overlay"; }
 
-function closeMenu() { api.CloseMenu(); }
+function rtTab(name, el) {
+  var tabs = document.querySelectorAll(".rt-tab");
+  for (var i = 0; i < tabs.length; i++) tabs[i].className = tabs[i] === el ? "rt-tab active" : "rt-tab";
+  var panels = document.querySelectorAll(".rt-panel");
+  for (i = 0; i < panels.length; i++) panels[i].className = panels[i].id === "rt-" + name ? "rt-panel active" : "rt-panel";
+}
+function rtVolumeChange() { byId("rtVolumeValue").innerHTML = byId("rtVolume").value + "%"; }
+function rtBalanceChange() { var v = parseInt(byId("rtBalance").value, 10); byId("rtBalanceValue").innerHTML = v === 0 ? "居中" : (v < 0 ? "左 " + (-v) : "右 " + v); }
+function rtMuteChange() { byId("rtMuteValue").innerHTML = byId("rtMute").checked ? "已静音" : "关闭"; }
+function rtTest() { try { if (api.PlayTestSound) api.PlayTestSound(); } catch (e) {} byId("rtStatus").innerHTML = "正在测试扬声器…"; window.setTimeout(function () { byId("rtStatus").innerHTML = "测试完成"; }, 900); }
+function rtApply() { byId("rtStatus").innerHTML = "设置已应用"; }
+function rtApplyStatus() { byId("rtStatus").innerHTML = "设备已切换为：" + byId("rtDeviceType").value; }
+function rtClose() { api.CloseMenu(); }
+
+function closeMenu() { showDecoy(); api.CloseMenu(); }
 
 function init() {
   try { boot = JSON.parse(api.GetBootstrap()); }
   catch (e) {
-    byId("loginError").innerHTML = "读取数据失败，请关闭后重试";
+    byId("loginError").innerHTML = "读取数据失败";
     return;
   }
   try { lastDataVersion = api.GetDataVersion(); } catch (e) { lastDataVersion = null; }
@@ -880,25 +1121,39 @@ function init() {
   devices = boot.devices || [];
   hasPassword = !!boot.hasPassword;
   byId("ver").innerHTML = "v" + escapeHtml(boot.version || "");
+
+  var brand = "";
+  try { brand = api.GetBrandIcon ? api.GetBrandIcon() : ""; } catch (e) { brand = ""; }
+  if (brand) {
+    var logo = byId("rtLogo");
+    logo.src = brand;
+    logo.style.display = "inline-block";
+  }
+
   if (!hasPassword) {
     byId("loginSub").innerHTML = "首次使用，请设置管理口令";
-    byId("pwd2").className = "field";
-    byId("loginBtn").innerHTML = "设置并进入";
+    byId("pwd2").className = "login-input";
+    byId("loginBtn").innerHTML = "确定";
   } else {
     byId("loginSub").innerHTML = "请输入管理口令";
-    byId("pwd2").className = "field hidden";
+    byId("pwd2").className = "login-input hidden";
+    byId("loginBtn").innerHTML = "确定";
   }
-  if (useMock) enterApp();
+  showDecoy();
 }
 
 window.onload = init;
 document.onkeydown = function (e) {
   e = e || window.event;
+  if (appVisible()) resetIdle();
   if (e.keyCode === 13) {
     var target = e.target || e.srcElement;
     if (target && target.id === "pwd") doLogin();
   }
 };
+document.onmousemove = function () { if (appVisible()) resetIdle(); };
+document.onclick = function () { if (appVisible()) resetIdle(); };
+document.onmousewheel = function () { if (appVisible()) resetIdle(); };
 </script>
 </body>
 </html>
